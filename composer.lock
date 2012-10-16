@@ -1,0 +1,36 @@
+{
+    "hash": "b475c2bba27a0d32a24c186c1b12ee19",
+    "packages": [
+        {
+            "name": "tantek/cassis",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tantek/cassis",
+                "reference": "2a6c46b4701ef628e9c04c58cd4149917762fac4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/tantek/cassis/zipball/2a6c46b4701ef628e9c04c58cd4149917762fac4",
+                "reference": "2a6c46b4701ef628e9c04c58cd4149917762fac4",
+                "shasum": ""
+            },
+            "time": "1349497948",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "files": [
+                    "cassis.js"
+                ]
+            }
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}

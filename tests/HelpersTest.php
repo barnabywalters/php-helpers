@@ -4,7 +4,18 @@ namespace BarnabyWalters\Helpers\Test;
 
 use BarnabyWalters\Helpers\Helpers as H;
 
-include_once(realpath(dirname(__DIR__) . '/BarnabyWalters/Helpers.php'));
+$vendorPath = realpath(dirname(__DIR__) . '/vendor/autoload.php');
+
+if (file_exists($vendorPath))
+{
+	ob_start();
+	require $vendorPath;
+	ob_end_clean();
+}
+else
+{
+	require realpath(dirname(__DIR__) . '/BarnabyWalters/Helpers.php');
+}
 
 /**
  *	A test suite for app\helpers

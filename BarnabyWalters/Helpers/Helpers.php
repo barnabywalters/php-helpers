@@ -336,7 +336,7 @@ class Helpers {
 			
 			ob_start();
 			$links = array_map(function($value) use ($tidy) {
-				return $tidy ? web_address_to_uri($value, true) : $value;
+				return $tidy ? \web_address_to_uri($value, true) : $value;
 			}, $links);
 			ob_end_clean();
 			

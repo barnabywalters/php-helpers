@@ -9,5 +9,6 @@
     },
     "require": {
     	"tantek/cassis": "*"
-    }
+    },
+    "minimum-stability": "dev"
 }
