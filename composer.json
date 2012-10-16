@@ -1,0 +1,16 @@
+{
+    "name": "barnabywalters/helpers",
+    "type": "library",
+    "description": "Yet another library of those damned helper functions.",
+    "autoload": {
+        "psr-0": {
+            "BarnabyWalters": ""
+        }
+    }
+    "require": {
+    	"tantek/cassis": "*"
+    }
+    "suggest": {
+    	"dflydev/markdown": "Required in order for processText to work properly"
+    }
+}
