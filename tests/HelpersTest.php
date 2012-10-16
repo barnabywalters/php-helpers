@@ -4,26 +4,27 @@ namespace BarnabyWalters\Helpers\Test;
 
 use BarnabyWalters\Helpers\Helpers as H;
 
+// Load files
 $vendorPath = realpath(dirname(__DIR__) . '/vendor/autoload.php');
-
 if (file_exists($vendorPath))
 {
+	// If the vendor dir exists (the user is in a testing environment) load the autoloader
 	ob_start();
 	require $vendorPath;
 	ob_end_clean();
 }
 else
 {
-	require realpath(dirname(__DIR__) . '/BarnabyWalters/Helpers.php');
+	die('Cannot run tests as you haven’t installed the required dependencies');
 }
 
 /**
- *	A test suite for app\helpers
- *
- *	Contains tests for all my helper functions
- *
- *	@author Barnaby Walters http://waterpigs.co.uk
- *	@autor app\helpers\tests
+ * A test suite for barnabywalters/helpers
+ * 
+ * Contains tests for all my helper functions
+ * 
+ * @author Barnaby Walters http://waterpigs.co.uk
+ * @autor app\helpers\tests
  * @todo Move all traces of THE TRUNCENATOR out of here and into their own package
  */
 class HelpersTest extends \PHPUnit_Framework_TestCase
