@@ -3,63 +3,47 @@
 namespace BarnabyWalters\Helpers;
 
 /**
- *	Functional Helpers
+ * Functional Helpers
  *
- *	In which I define a load of helpful little functions, nicely namespaced.
- *	Actually, the namespaceing is probably redundant, and may be reduced in future versions.
- *	
- *	Some of these are stolen from elsewhere, credit given where due.
+ * In which I define a load of helpful little functions, nicely namespaced.
+ * Actually, the namespaceing is probably redundant, and may be reduced in future versions.
+ * 
+ * Some of these are stolen from elsewhere, credit given where due.
  *
  */
 class Helpers {
 	
 	/**
-	 *	Returns the truest of the args presented. This is a dirty shortcut.
+	 * Returns the truest of the args presented. This is a dirty shortcut.
 	 */
-	static function truest()
+	public static function truest()
 	{
-		foreach (func_get_args() as $arg)
+		$args = func_get_args();
+		foreach ($args as $arg)
 		{
 			if (!empty($arg))
 			{
 				return $arg;
 			}
 		}
+		
+		return $args[0];
 	}
 	
 	/**
-	 *	Shortcut for pretty printing
+	 * Parse a representation of an author out of a URI
+	 * 
+	 * Given a URI, returns a plaintext representation of the author of that URI,
+	 * nice and ready to be processed/auto linked in whatever way you see fit.
+	 * Currently enabled for the following services:
+	 * 
+	 * * Twitter
+	 * * Indiewebsite domain (sans protocol) — assumed if doesn’t fit anything else
 	 *
-	 *	@param mixed $var The information to print
+	 * @param string $uri The URI to parse
+	 * @return string The parsed author representation, e.g. @barnabywalters or waterpigs.co.uk
 	 */
-	static function pp($var)
-	{
-		if (is_array($var) or is_object($var))
-		{
-			echo '<pre>';
-			print_r($var);
-			echo '</pre>';
-		}
-		else
-		{
-			var_dump($var);
-		}
-	}
-	
-	/**
-	 *	Parse a representation of an author out of a URI
-	 *	
-	 *	Given a URI, returns a plaintext representation of the author of that URI,
-	 *	nice and ready to be processed/auto linked in whatever way you see fit.
-	 *	Currently enabled for the following services:
-	 *	
-	 *	* Twitter
-	 *	* Indiewebsite domain (sans protocol) — assumed if doesn’t fit anything else
-	 *
-	 *	@param string $uri The URI to parse
-	 *	@return string The parsed author representation, e.g. @barnabywalters or waterpigs.co.uk
-	 */
-	static function authorFromUri($uri)
+	public static function authorFromUri($uri)
 	{
 		$matches = array();
 		if (preg_match('|^https?://twitter.com/([a-zA-Z0-9_]{1,20})/|', $uri, $matches))
@@ -75,42 +59,22 @@ class Helpers {
 	}
 	
 	/**
-	 *	Fetch Open Graph Image at URL
-	 *
-	 *	Given a valid OpenPhoto image page URI, this function fetches the page and parses the open graph
-	 *	og:image property out of it
-	 *
-	 *	@param string $uri The URI of the photo page to retrieve
-	 *	@param string $host The openphoto host to use (no trailing slash)
-	 *	@return string|bool The URI of the image represented by $uri or false if none found
-	 * @todo implement
+	 * ~ THE TRUNCENATOR ~
+	 * 
+	 * Takes a string (tweet-like note) and some config params, produces a truncated version to spec.
+	 * 
+	 * @param string	$string		The string to be truncated
+	 * @param int		$length		The maximum length of the output
+	 * @param string	$ellipsis	The string to append in the case of truncation
+	 * @param string	$uri		The canonical URI of the post, to be added to the end
+	 * @param int		$urilen		Treat any URLs as if they were this length
+	 * @param bool		$parens		If trucation is not required, surround the canon. link with parens (())
+	 * @param int		$hashtags	The number of hashtags present in the text to preserve if trucation occurs
+	 * 
+	 * @return string The truncated string
+	 * @todo A lot of this functionality is not properly implemented
 	 */
-	static function FetchOpenGraphImage($uri)
-	{
-		// Find all occurances of $host . '/p/:id'
-		
-		// For each, retrieve the page and look for 
-		$html = file_get_contents('http://photos.waterpigs.co.uk/p/oh');
-		preg_match('/<meta property\=\"og:image\" content\=\"(\W)\"/', $html);
-	}
-	
-	/**
-	 *	~ THE TRUNCENATOR ~
-	 *	
-	 *	Takes a string (tweet-like note) and some config params, produces a truncated version to spec.
-	 *	
-	 *	@param string	$string		The string to be truncated
-	 *	@param int		$length		The maximum length of the output
-	 *	@param string	$ellipsis	The string to append in the case of truncation
-	 *	@param string	$uri		The canonical URI of the post, to be added to the end
-	 *	@param int		$urilen		Treat any URLs as if they were this length
-	 *	@param bool		$parens		If trucation is not required, surround the canon. link with parens (())
-	 *	@param int		$hashtags	The number of hashtags present in the text to preserve if trucation occurs
-	 *	
-	 *	@return string The truncated string
-	 *	@todo A lot of this functionality is not properly implemented
-	 */
-	static function truncate($string, $length=140, $uri=null, $urilen=null, $parens=true, $ellipsis='…', $hastags=1)
+	public static function truncate($string, $length=140, $uri=null, $urilen=null, $parens=true, $ellipsis='…', $hastags=1)
 	{
 		mb_internal_encoding('UTF-8');
 		
@@ -187,27 +151,27 @@ class Helpers {
 	}
 	
 	/**
-	 *	Replace <img> elements with their @href
-	 *	
-	 *	Finds all img elements and replaces them with the value of their @href. Very useful for content syndication
-	 *	to services which do not allow HTML
+	 * Replace <img> elements with their @href
+	 * 
+	 * Finds all img elements and replaces them with the value of their @href. Very useful for content syndication
+	 * to services which do not allow HTML
 	 *
-	 *	@param string $str The string to process
-	 *	@return string The original $str with all <img> tags replaced by their @href value
+	 * @param string $str The string to process
+	 * @return string The original $str with all <img> tags replaced by their @href value
 	 */
-	static function expandImg($str)
+	public static function expandImg($str)
 	{
 		return preg_replace('/<img .*src\=\"(\S*)\"+ .* ?\/?>/i', '$1', $str);
 	}
 	
 	/**
-	 *	Find the length a string would be if all URLs were a certain length
-	 *	
-	 *	@param string $string The string to process
-	 *	@param int $urilen The length to treat all URIs in $string as
-	 *	@return int The length $string would be if all URIs were $urilen long
+	 * Find the length a string would be if all URLs were a certain length
+	 * 
+	 * @param string $string The string to process
+	 * @param int $urilen The length to treat all URIs in $string as
+	 * @return int The length $string would be if all URIs were $urilen long
 	 */
-	static function uriMbStrlen($string, $urilen)
+	public static function uriMbStrlen($string, $urilen)
 	{
 		// Find all urls
 		$urls = Helpers::findUrls($string, $tidy=false);
@@ -226,35 +190,35 @@ class Helpers {
 	}
 	
 	/**
-	 *	DateTime to <time>
-	 *	
-	 *	Generates a <time> element given a PHP DateTime object
-	 *	Currently only supports a resolution of YYYY-MM-DD
-	 *	
-	 *	@todo Add support for more precise times
-	 *	@todo Add support for string dates using strtotime()
+	 * DateTime to <time>
+	 * 
+	 * Generates a <time> element given a PHP DateTime object
+	 * Currently only supports a resolution of YYYY-MM-DD
+	 * 
+	 * @todo Add support for more precise times
+	 * @todo Add support for string dates using strtotime()
 	 *
-	 *	@param DateTime $datetime The datetime to turn into a <time> element
-	 *	@return string A <time> element representing $datetime
+	 * @param DateTime $datetime The datetime to turn into a <time> element
+	 * @return string A <time> element representing $datetime
 	 */
-	static function timeElement($datetime)
+	public static function timeElement($datetime)
 	{
 		$t = '<time datetime="' . $datetime -> format('Y-m-d') . '" title="' . $datetime -> format('Y-z') . '">' . $datetime -> format('Y-m-d') . '</time>';
 		return $t;
 	}
 	
 	/**
-	 *	Slugify
-	 *	
-	 *	The ultimate safe URL generator, courtesy of http://cubiq.org/the-perfect-php-clean-url-generator
-	 *	Given a string, makes it uber-readable and URI safe
+	 * Slugify
+	 * 
+	 * The ultimate safe URL generator, courtesy of http://cubiq.org/the-perfect-php-clean-url-generator
+	 * Given a string, makes it uber-readable and URI safe
 	 *
-	 *	@param string $str The string to process
-	 *	@param array $replace An array of characters to replace with whitespace
-	 *	@param string $delimiter The character to use to separate words, defaulting to '-'
-	 *	@return string The cleaned string
+	 * @param string $str The string to process
+	 * @param array $replace An array of characters to replace with whitespace
+	 * @param string $delimiter The character to use to separate words, defaulting to '-'
+	 * @return string The cleaned string
 	 */
-	static function toAscii($str, $replace=array(), $delimiter='-')
+	public static function toAscii($str, $replace=array(), $delimiter='-')
 	{
 		setlocale(LC_ALL, 'en_US.UTF8');
 		
@@ -271,14 +235,14 @@ class Helpers {
 	}
 	
 	/**
-	 *	Tagstring to Array
-	 *	
-	 *	Takes a comma delimited tag string, returns an array of the tags contained within.
+	 * Tagstring to Array
+	 * 
+	 * Takes a comma delimited tag string, returns an array of the tags contained within.
 	 *
-	 *	@param string $tagstring The comma delimited string to process
-	 *	@return array An array of the tags contained within $tagstring
+	 * @param string $tagstring The comma delimited string to process
+	 * @return array An array of the tags contained within $tagstring
 	 */
-	static function tagstringToArray($tagstring)
+	public static function tagstringToArray($tagstring)
 	{
 		$tags = explode(',', trim($tagstring));
 		$tags = array_map(function($string) {
@@ -288,40 +252,111 @@ class Helpers {
 	}
 	
 	/**
-	 *	Clean Tagstring
-	 *	
-	 *	Normalises a tag string by converting it to an array, then collapsing the array into a string.
+	 * Clean Tagstring
+	 * 
+	 * Normalises a tag string by converting it to an array, then collapsing the array into a string.
 	 *
-	 *	@param string $tagstring The comma-delimited string to clean
-	 *	@return string The cleaned string
+	 * @param string $tagstring The comma-delimited string to clean
+	 * @return string The cleaned string
 	 */
-	static function tagstringClean($tagstring)
+	public static function tagstringClean($tagstring)
 	{
 		$tags = Helpers::tagstringToArray($tagstring);
 		return implode(',', $tags);
 	}
 	
 	/**
-	 *	Date to ATOM Date
-	 *	
-	 *	@param string $date A string representing the date to process
-	 *	@param string $date formatted as an ATOM date
-	 *	
-	 *	@todo Allow $date to be a DateTime object
+	 * Date to ATOM Date
+	 * 
+	 * @param string $date A string representing the date to process
+	 * @param string $date formatted as an ATOM date
+	 * 
+	 * @todo Allow $date to be a DateTime object
 	 */
-	static function atomDate($date)
+	public static function atomDate($date)
 	{
 		return date(DATE_ATOM, strtotime($date));
 	}
 	
 	/**
-	 *	Find URLs
-	 *	
-	 *	@param string $text The string to find URLs in
-	 *	@param bool $tidy Whether or not to tidy the URLs with cassis web_address_to_uri(, true)
-	 *	@return array An array containing all the URLs found in $text
+	 * Get Privacy Tags
+	 * 
+	 * Given an array of the tags associated with an object, find any which are in the auth namespace, parse them
+	 * and return them.
+	 * 
+	 * ## Multiple Tag Rules
+	 * 
+	 * Authorization tags are all positive and additive. That is, it is impossible for one tag to contradict 
+	 * another.
+	 * 
+	 * * All auth tags are machine tags of the form `auth:(:any)=(:any)`, where the wildcards must be:
+	 *     1. An auth keyword from the list below
+	 *     1. A valid hostname, e.g. `example.com`, `waterpigs.co.uk`, `bill.someservice.org`
+	 * 
+	 * ### Auth Keywords
+	 * 
+	 * * `private`
+	 *     * If an object contains **ANY** `auth:private=*` tags, it is a private post and **MUST ONLY** be exposed to
+	 *       users who are authenticated as one of the `private-*` domains
+	 *     * Multiple `auth:private-*` tags **MAY** be specified, resulting in **ANY** of the specified users being
+	 *       able to view the content
+	 * * `editable`
+	 *     * `auth:editable=user.com` states that user.com is allowed to edit this object. An edit UI should be made
+	 *       available to them.
+	 *     * Users who can edit an object due to `auth:editable` **CANNOT** add or remove `auth:editable` tags
+	 *       **UNLESS** they have `role == super-admin`
+	 * * Users with `role == 'super-admin'` **MUST** be able to perform **ANY** action on **ANY** object. These users
+	 *   **SHOULD** be limited to server administrators
+	 * 
+	 * ## Example Tags
+	 * 
+	 * All of these examples are comma-separated tagstrings.
+	 * 
+	 * * `auth:private=example.com` states that the object is private but user example.com can view it
+	 * * `auth:private=example.com, auth:private=someguy.org` states that the object is private but both example.com
+	 *   someguy.org can view it
+	 * * `auth:private=someguy.org, auth:private=somegirl.com, auth:editable=somegirl.com` states that the object is 
+	 *   private but both someguy.org and somegirl.com can view it. somegirl.com can also edit it, but cannot change 
+	 *   authtag permissions
 	 */
-	static function findUrls($text, $tidy=true)
+	public static function getPrivacyTags(array $tags)
+	{
+		$authTags = array();
+		
+		$keywords = array(
+			'private',
+			'editable'
+		);
+		
+		$authTags = array_filter($tags, function ($tag) use ($keywords) {
+			foreach ($keywords as $k) {
+				if (preg_match('/^auth:' . preg_quote($k) . '=/', $tag))
+					return true;
+			}
+			
+			return false;
+		});
+		
+		// Parse tags
+		$parsedTags = array();
+		
+		foreach ($authTags as $tag) {
+			$matches = array();
+			preg_match('/^auth:(?P<keyword>[a-zA-Z0-9-]+)=(?P<domain>.*)$/i', $tag, $matches);
+			$parsedTags[$matches['keyword']][] = $matches['domain'];
+		}
+		
+		return $parsedTags;
+	}
+	
+	/**
+	 * Find URLs
+	 * 
+	 * @param string $text The string to find URLs in
+	 * @param bool $tidy Whether or not to tidy the URLs with cassis web_address_to_uri(, true)
+	 * @return array An array containing all the URLs found in $text
+	 */
+	public static function findUrls($text, $tidy=true)
 	{
 		// Pattern is from 1 cassis.js, slightly modified to not look for twitter names
 		// E.G. beforehand it would return @tantek for @tantek.com. This function is just interested in addresses, not twitter stuff
