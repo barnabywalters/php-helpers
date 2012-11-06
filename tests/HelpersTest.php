@@ -289,7 +289,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
 		$tags = array('sometag', 'someothertag');
 		$expected = array();
 		
-		$this -> assertEquals($expected, H::getPrivacyTags($tags));
+		$this -> assertEquals($expected, H::getAuthTags($tags));
 	}
 	
 	/**
@@ -307,7 +307,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
 			)
 		);
 		
-		$this -> assertEquals($expected, H::getPrivacyTags($tags));
+		$this -> assertEquals($expected, H::getAuthTags($tags));
 	}
 	
 	/**
@@ -328,7 +328,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase
 			)
 		);
 		
-		$this -> assertEquals($expected, H::getPrivacyTags($tags));
+		$this -> assertEquals($expected, H::getAuthTags($tags));
 	}
 	
 	/**

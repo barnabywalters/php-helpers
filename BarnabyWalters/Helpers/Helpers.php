@@ -319,7 +319,7 @@ class Helpers {
 	 *   private but both someguy.org and somegirl.com can view it. somegirl.com can also edit it, but cannot change 
 	 *   authtag permissions
 	 */
-	public static function getPrivacyTags(array $tags)
+	public static function getAuthTags(array $tags)
 	{
 		$authTags = array();
 		
