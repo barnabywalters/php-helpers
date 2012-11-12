@@ -382,6 +382,24 @@ class Helpers {
 		
 		return array();
 	}
+        
+        /**
+         * String to Hex Colour
+         * 
+         * Inspired by the Dopplr colours and the work of Brian Suda and Sandeep
+         * Shetty. This differs a little from the md5 technique as it should 
+         * create similar colours for similar sounding words -- only time will 
+         * tell if this is any use and/or completely ineffective.
+         * 
+         * @param string $word The string to calculate the colour for
+         * @return string a css hex colour of the form XXXXXX
+         * @todo Write tests
+         */
+        public static function stringToHexColour($word) {
+            return substr(bin2hex(metaphone($word, 6)), 0, 6);
+        }
+
+
 }
 
 // EOF Helpers.php
