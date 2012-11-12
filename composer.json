@@ -10,5 +10,8 @@
     "require": {
     	"tantek/cassis": "*"
     },
+    "suggests": {
+        "doctrine/orm": "*"
+    },
     "minimum-stability": "dev"
 }
