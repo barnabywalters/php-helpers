@@ -1,4 +1,5 @@
 <phpunit backupGlobals="true"
+         bootstrap="Tests/bootstrap.php"
          backupStaticAttributes="false"
          cacheTokens="false"
          colors="false"
@@ -15,14 +16,14 @@
          stopOnSkipped="false"
          strict="false"
          verbose="false">
-	<testsuites>
-		<testsuite name="Test Suite">
-			<directory suffix="Test.php">tests/</directory>
-		</testsuite>
-	</testsuites>
-	<logging>
-		<log type="coverage-html" target="tmp/report" charset="UTF-8"
-		   highlight="true"/>
-		<log type="testdox-html" target="tmp/index.html"/>
-	</logging>
+    <testsuites>
+        <testsuite name="Test Suite">
+            <directory suffix="Test.php">Tests/</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <log type="coverage-html" target="tmp/report" charset="UTF-8"
+                     highlight="true"/>
+        <log type="testdox-html" target="tmp/index.html"/>
+    </logging>
 </phpunit>
