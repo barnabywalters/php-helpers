@@ -32,6 +32,8 @@ class Helpers {
      * @param string $url = null A URL to append to the content, if any
      * @param string $inReplyTo = null A URL the content is in reply to
      * @return array An assoc. array ready to pass as POST vars to `statuses/update`
+     * 
+     * @todo Add some intelligent blockquote/other markdown handling
      */
     public static function prepareForTwitter($text, $url = null, $inReplyTo = null) {
         // Create the tweet array
@@ -42,7 +44,7 @@ class Helpers {
 
         // Run THE TRUNCENATOR using defaults suitable for twitter
         ob_start();
-        $tweet['status'] = H::truncate(
+        $tweet['status'] = Truncenator::truncate(
                 strip_tags(H::expandImg($tweet['status'])),
                 $length = 140,
                 $uri = $url,
