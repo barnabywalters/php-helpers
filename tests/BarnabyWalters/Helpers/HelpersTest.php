@@ -14,8 +14,6 @@ use BarnabyWalters\Helpers\Helpers as H;
  * @todo Move all traces of THE TRUNCENATOR out of here and into their own package
  */
 class HelpersTest extends \PHPUnit_Framework_TestCase {
-    // !Logic
-
     /**
      * Test the truest() function
      * 
