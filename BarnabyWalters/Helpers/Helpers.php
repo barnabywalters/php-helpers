@@ -5,11 +5,11 @@ namespace BarnabyWalters\Helpers;
 /**
  * Functional Helpers
  *
- * In which I define a load of helpful little functions, nicely namespaced.
- * Actually, the namespaceing is probably redundant, and may be reduced in future versions.
+ * In which I define a load of helpful little functions.
  * 
  * Some of these are stolen from elsewhere, credit given where due.
- *
+ * 
+ * @author Barnaby Walters http://waterpigs.co.uk <barnaby@waterpigs.co.uk>
  */
 class Helpers {
 
@@ -138,9 +138,9 @@ class Helpers {
     /**
      * Replace <img> elements with their @href
      * 
-     * Finds all img elements and replaces them with the value of their @href. Very useful for content syndication
-     * to services which do not allow HTML
-     *
+     * Finds all img elements and replaces them with the value of their @href. 
+     * Very useful for content syndication to services which do not allow HTML
+     * 
      * @param string $str The string to process
      * @return string The original $str with all <img> tags replaced by their @href value
      */
@@ -190,7 +190,9 @@ class Helpers {
     /**
      * Slugify
      * 
-     * The ultimate safe URL generator, courtesy of http://cubiq.org/the-perfect-php-clean-url-generator
+     * The ultimate safe URL generator, courtesy of 
+     * http://cubiq.org/the-perfect-php-clean-url-generator
+     * 
      * Given a string, makes it uber-readable and URI safe
      *
      * @param string $str The string to process
@@ -216,7 +218,8 @@ class Helpers {
     /**
      * Tagstring to Array
      * 
-     * Takes a comma delimited tag string, returns an array of the tags contained within.
+     * Takes a comma delimited tag string, returns an array of the tags contained 
+     * within.
      *
      * @param string $tagstring The comma delimited string to process
      * @return array An array of the tags contained within $tagstring
@@ -232,7 +235,8 @@ class Helpers {
     /**
      * Clean Tagstring
      * 
-     * Normalises a tag string by converting it to an array, then collapsing the array into a string.
+     * Normalises a tag string by converting it to an array, then collapsing the 
+     * array into a string.
      *
      * @param string $tagstring The comma-delimited string to clean
      * @return string The cleaned string
@@ -257,43 +261,52 @@ class Helpers {
     /**
      * Get Privacy Tags
      * 
-     * Given an array of the tags associated with an object, find any which are in the auth namespace, parse them
-     * and return them.
+     * Given an array of the tags associated with an object, find any which are 
+     * in the auth namespace, parse them and return them.
      * 
      * ## Multiple Tag Rules
      * 
-     * Authorization tags are all positive and additive. That is, it is impossible for one tag to contradict 
-     * another.
+     * Authorization tags are all positive and additive. That is, it is 
+     * impossible for one tag to contradict another.
      * 
-     * * All auth tags are machine tags of the form `auth:(:any)=(:any)`, where the wildcards must be:
+     * * All auth tags are machine tags of the form `auth:(:any)=(:any)`, where 
+     *   the wildcards must be:
      *     1. An auth keyword from the list below
-     *     1. A valid hostname, e.g. `example.com`, `waterpigs.co.uk`, `bill.someservice.org`
+     *     1. A valid hostname, e.g. `example.com`, `waterpigs.co.uk`, 
+     *        `bill.someservice.org`
      * 
      * ### Auth Keywords
      * 
      * * `private`
-     *     * If an object contains **ANY** `auth:private=*` tags, it is a private post and **MUST ONLY** be exposed to
-     *       users who are authenticated as one of the `private-*` domains
-     *     * Multiple `auth:private-*` tags **MAY** be specified, resulting in **ANY** of the specified users being
-     *       able to view the content
+     *     * If an object contains **ANY** `auth:private=*` tags, it is a private
+     *       post and **MUST ONLY** be exposed to users who are authenticated as
+     *       one of the `private-*` domains
+     *     * Multiple `auth:private-*` tags **MAY** be specified, resulting in 
+     *       **ANY** of the specified users being able to view the content
      * * `editable`
-     *     * `auth:editable=user.com` states that user.com is allowed to edit this object. An edit UI should be made
-     *       available to them.
-     *     * Users who can edit an object due to `auth:editable` **CANNOT** add or remove `auth:editable` tags
-     *       **UNLESS** they have `role == super-admin`
-     * * Users with `role == 'super-admin'` **MUST** be able to perform **ANY** action on **ANY** object. These users
-     *   **SHOULD** be limited to server administrators
+     *     * `auth:editable=user.com` states that user.com is allowed to edit 
+     *       this object. An edit UI should be made available to them.
+     *     * Users who can edit an object due to `auth:editable` **CANNOT** add 
+     *       or remove `auth:editable` tags **UNLESS** they have 
+     *       `role == super-admin`
+     * Users with `role == 'super-admin'` **MUST** be able to perform **ANY** 
+     * action on **ANY** object. These users **SHOULD** be limited to server 
+     * administrators. AuthTag implementations should be aware of this but MUST 
+     * NOT implement it directly, it must be left to the outer authorization 
+     * code as the super-admin role may have different names on different systems.
      * 
      * ## Example Tags
      * 
      * All of these examples are comma-separated tagstrings.
      * 
-     * * `auth:private=example.com` states that the object is private but user example.com can view it
-     * * `auth:private=example.com, auth:private=someguy.org` states that the object is private but both example.com
-     *   someguy.org can view it
-     * * `auth:private=someguy.org, auth:private=somegirl.com, auth:editable=somegirl.com` states that the object is 
-     *   private but both someguy.org and somegirl.com can view it. somegirl.com can also edit it, but cannot change 
-     *   authtag permissions
+     * * `auth:private=example.com` states that the object is private but user 
+     *   example.com can view it
+     * * `auth:private=example.com, auth:private=someguy.org` states that the 
+     *   object is private but both example.com someguy.org can view it
+     * * `auth:private=someguy.org, auth:private=somegirl.com, 
+     *   auth:editable=somegirl.com` states that the object is private but both 
+     *   someguy.org and somegirl.com can view it. somegirl.com can also edit it, 
+     *   but cannot change authtag permissions
      */
     public static function getAuthTags(array $tags) {
         $authTags = array();
@@ -304,13 +317,13 @@ class Helpers {
         );
 
         $authTags = array_filter($tags, function ($tag) use ($keywords) {
-                    foreach ($keywords as $k) {
-                        if (preg_match('/^auth:' . preg_quote($k) . '=/', $tag))
-                            return true;
-                    }
+            foreach ($keywords as $k) {
+                if (preg_match('/^auth:' . preg_quote($k) . '=/', $tag))
+                    return true;
+            }
 
-                    return false;
-                });
+            return false;
+        });
 
         // Parse tags
         $parsedTags = array();
@@ -344,8 +357,8 @@ class Helpers {
 
             ob_start();
             $links = array_map(function($value) use ($tidy) {
-                        return $tidy ? \web_address_to_uri($value, true) : $value;
-                    }, $links);
+                return $tidy ? \web_address_to_uri($value, true) : $value;
+            }, $links);
             ob_end_clean();
 
             // $links = ['http://someurl.tld', •••]
