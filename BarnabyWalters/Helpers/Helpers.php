@@ -246,16 +246,27 @@ class Helpers {
         return implode(',', $tags);
     }
 
-    /**
-     * Date to ATOM Date
-     * 
-     * @param string $date A string representing the date to process
-     * @param string $date formatted as an ATOM date
-     * 
-     * @todo Allow $date to be a DateTime object
-     */
-    public static function atomDate($date) {
-        return date(DATE_ATOM, strtotime($date));
+    public static function autolinkHashTags($text, $baseUrl) {
+        $baseUrl = rtrim($baseUrl, '/');
+        
+        // $replacements = ["#tag" => "<a rel="tag" href="/tags/tag">#tag</a>]
+        $replacements = array();
+        $matches = array();
+        
+        if (preg_match_all('/#[\-_a-zA-Z0-9]+/', $text, $matches, PREG_PATTERN_ORDER)) {
+            // Look up #tags, get Full name and URL
+            foreach ($matches[0] as $name) {
+                $name = str_replace('#', '', $name);
+                $replacements[$name] = '<a rel="tag" href="' . $baseUrl . '/' . $name . '">#' . $name . '</a>';
+            }
+
+            // Replace #tags with valid microformat-enabled link
+            foreach ($replacements as $name => $replacement) {
+                $text = str_replace('#' . $name, $replacement, $text);
+            }
+        }
+        
+        return $text;
     }
 
     /**
@@ -317,13 +328,13 @@ class Helpers {
         );
 
         $authTags = array_filter($tags, function ($tag) use ($keywords) {
-            foreach ($keywords as $k) {
-                if (preg_match('/^auth:' . preg_quote($k) . '=/', $tag))
-                    return true;
-            }
+                    foreach ($keywords as $k) {
+                        if (preg_match('/^auth:' . preg_quote($k) . '=/', $tag))
+                            return true;
+                    }
 
-            return false;
-        });
+                    return false;
+                });
 
         // Parse tags
         $parsedTags = array();
@@ -335,6 +346,18 @@ class Helpers {
         }
 
         return $parsedTags;
+    }
+
+    /**
+     * Date to ATOM Date
+     * 
+     * @param string $date A string representing the date to process
+     * @param string $date formatted as an ATOM date
+     * 
+     * @todo Allow $date to be a DateTime object
+     */
+    public static function atomDate($date) {
+        return date(DATE_ATOM, strtotime($date));
     }
 
     /**
@@ -357,8 +380,8 @@ class Helpers {
 
             ob_start();
             $links = array_map(function($value) use ($tidy) {
-                return $tidy ? \web_address_to_uri($value, true) : $value;
-            }, $links);
+                        return $tidy ? \web_address_to_uri($value, true) : $value;
+                    }, $links);
             ob_end_clean();
 
             // $links = ['http://someurl.tld', •••]
