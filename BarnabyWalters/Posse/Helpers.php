@@ -15,21 +15,22 @@ class Helpers {
     /**
      * Prepare For Twitter
      * 
-     * Takes an activity and returns an assoc. array suitable for POSTing to statuses/update.
+     * Takes some parameters and returns an array suitable for conversion to 
+     * a query string and submitting to the twitter API.
      * 
-     * Looks inside `$activity->content` and `$activity -> title` for the text for the status
-     * {@todo look elsewhere too}, then truncates it using THE TRUNCENATOR set to maxlen of
-     * 140, urilen of 20 and uri of $activity -> object -> url (string so we’re okay). The
-     * result is stored in the `status` key of the return array.
+     * $text does not have to be under 140 chars, THE TRUNCENATOR is used 
+     * internally to truncate the content and append the $url within 140 chars.
      * 
-     * Then we check `$activity -> object -> inReplyTo -> url` for a twitter.com status URL. If
-     * it is one, we extract the status ID and put it in the `in_reply_to_status_id` key of
-     * the return array.
+     * If $inReplyTo is set and is a twitter.com status URL, the id will be 
+     * parsed out of it and added to the `in_reply_to_status_id` param of the
+     * return array.
      * 
      * Note that twitter will not process a tweet as a reply correctly if the @name of the
      * target is not included.
      * 
-     * @param 
+     * @param string $text The body text
+     * @param string $url = null A URL to append to the content, if any
+     * @param string $inReplyTo = null A URL the content is in reply to
      * @return array An assoc. array ready to pass as POST vars to `statuses/update`
      */
     public static function prepareForTwitter($text, $url = null, $inReplyTo = null) {
@@ -53,7 +54,8 @@ class Helpers {
             // Check if there’s a twitter status ID in the URL to use
             $tweetPattern = '/https?:\/\/twitter.com\/[a-zA-Z_]{1,20}\/status\/([0-9]*)/';
             $matches = array();
-            preg_match($tweetPattern, $activity->object->inReplyTo->url, $matches);
+            preg_match($tweetPattern, $inReplyTo, $matches);
+            
             $tweet['in_reply_to_status_id'] = $matches[1];
         }
 
