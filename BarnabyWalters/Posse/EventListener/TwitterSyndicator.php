@@ -38,12 +38,12 @@ use Guzzle\Plugin\Oauth\OauthPlugin;
  * objects *unless* they have a certain tag.
  * 
  * By default, TwitterSyndicator is configured to only syndicate objects tagged
- * with `t`. You can set both the strategy and the tag to your liking:
+ * with `tweet`. You can set both the strategy and the tag to your liking:
  * 
- * If you want to syndicate objects tagged with `tweet`, use this configuration:
+ * If you want to syndicate objects tagged with `t`, use this configuration:
  * 
  *     BarnabyWalters\Posse\EventListener\TwitterSyndicator:
- *       tag: tweet
+ *       tag: t
  * 
  * If you want to syndicate eveything to twitter *unless* it’s tagged, configure
  * like this:
@@ -88,7 +88,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
     const STRATEGY_SYNDICATE_UNLESS_TAGGED = 'SYNDICATE_UNLESS_TAGGED';
     const STRATEGY_SYNDICATE_IF_TAGGED = 'SYNDICATE_IF_TAGGED';
     
-    public $tag = 't';
+    public $tag = 'tweet';
     public $strategy = self::STRATEGY_SYNDICATE_IF_TAGGED;
     public $twitterApiVersion = '1.1';
     
@@ -100,18 +100,19 @@ class TwitterSyndicator implements EventSubscriberInterface {
      * @param array $config
      * @todo Add support for different twitter API versions?
      */
-    public function __construct(array $config) {
+    public function __construct(array $config = array()) {
         if (array_key_exists('strategy', $config))
                 $this->strategy = strtoupper(str_replace (' ', '_', $config['strategy']));
         
         if (array_key_exists('tag', $config))
                 $this->tag = strtolower($config['tag']);
         
-        $this->twitterCredentials = $config['twitterCredentials'];
+        if (array_key_exists('twitterCredentials', $config))
+            $this->twitterCredentials = $config['twitterCredentials'];
     }
     
     public static function getSubscribedEvents() {
-        return ['activitystreams.post.post' => 'syndicateToTwitter'];
+        return array('activitystreams.post.post' => 'syndicateToTwitter');
     }
     
     /**
@@ -185,10 +186,10 @@ class TwitterSyndicator implements EventSubscriberInterface {
         if ($this->client !== null) {
             $client = $this->client;
         } else {
-            $client = new Client('http://api.twitter.com/{version}', [
+            $client = new Client('http://api.twitter.com/{version}', array(
                 'version' => $this->twitterApiVersion,
                 'ssl.certificate_authority' => 'system',
-            ]);
+            ));
         }
         
         $oauth = new OauthPlugin(array(
