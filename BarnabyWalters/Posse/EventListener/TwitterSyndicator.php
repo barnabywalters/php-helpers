@@ -146,33 +146,33 @@ class TwitterSyndicator implements EventSubscriberInterface {
      *    the duplicates, append the tweet URL and set them again.
      * 
      * @param \ActivityStreams\Event\ActivityEvent $event
-     * @return boolean
+     * @return string|null The strings are just for test debugging purposes
      */
     public function syndicateToTwitter(Event $event) {
         if (!$event instanceof ActivityEvent)
-            return false;
+            return 'Not an ActivityEvent';
         
         /* @var $object ObjectInterface */
         $object = $event->getObject();
         
-        if (method_exists($object, 'getTags'))
-            return false;
+        if (!method_exists($object, 'getTags'))
+            return 'Object has no getTags() method';
         
         $tags = $object->getTags();
         
         if (!is_array($tags))
-            return false;
+            return 'Tags are not an array';
         
         $syndicating = false;
         
         if (($this->strategy == self::STRATEGY_SYNDICATE_IF_TAGGED
-                and in_array($this->tag, $tags))
+            and in_array($this->tag, $tags))
         or ($this->strategy == self::STRATEGY_SYNDICATE_UNLESS_TAGGED)
-                and !in_array($this->tag, $tags))
+            and !in_array($this->tag, $tags))
                 $syndicating = true;
         
         if (!$syndicating)
-            return false;
+            return 'Object is not a syndication candidate';
         
         // We’re syndicating!
         $content = $object->getContent() ?: $object->getSummary();
@@ -180,6 +180,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         if (method_exists($object, 'getInReplyTo'))
             $inReplyTo = $object->getInReplyTo();
+        else
+            $inReplyTo = null;
         
         $twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
         
@@ -212,18 +214,21 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/statuses/' . $tweetId;
         
         if (method_exists($object, 'addDownstreamDuplicate')) {
-            $object->addDownstreamCopy($tweetUrl);
-            return;
+            $object->addDownstreamDuplicate($tweetUrl);
+            return true;
         }
         
         // Otherwise, manually add it if permitted
         if (method_exists($object, 'getDownstreamDuplicates')
         and method_exists($object, 'setDownstreamDuplicates')) {
-            $copies = $object->getDownstreamCopies();
+            $copies = $object->getDownstreamDuplicates();
             array_push($copies, $tweetUrl);
-            $object->setDownstreamCopies($copies);
-            return;
+            var_dump($copies);
+            $object->setDownstreamDuplicates($copies);
+            return true;
         }
+        
+        return true;
     }
 }
 
