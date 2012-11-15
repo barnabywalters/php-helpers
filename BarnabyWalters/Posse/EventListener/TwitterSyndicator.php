@@ -59,12 +59,30 @@ use Guzzle\Plugin\Oauth\OauthPlugin;
  * 
  *     BarnabyWalters\Posse\EventListener\TwitterSyndicator:
  *       twitterCredentials:
- *        consumerKey: your_consumer_key
- *        consumerSecret: your_consumer_secret
- *        accessToken: your_access_token
- *        accessTokenSecret: your_access_token_secret
+ *         consumerKey: your_consumer_key
+ *         consumerSecret: your_consumer_secret
+ *         accessToken: your_access_token
+ *         accessTokenSecret: your_access_token_secret
  * 
- * @author barnabywalters
+ * ## Usage
+ * 
+ * Use by tagging your posts with whatever tag you’ve set up. Posts tagged as so
+ * will be truncated and syndicated to twitter. If the object supports downstream
+ * duplicates, the URL of the syndicated tweet will be added to the list, allowing
+ * for various cool stuff.
+ * 
+ * THE TRUNCENATOR is used internally to intelligently truncate the tweet and add
+ * a canonical URL to the end. If no truncation happens, the URL will be in 
+ * parentheses so users know there’s no extra text to see.
+ * 
+ * If the syndicate object has an inReplyTo URL which is a twitter status URL,
+ * the status_id will be automatically parsed out of it and added to the syndicated
+ * tweet. **BUT**, note that Twitter will only accept replies as replies if they
+ * contain the at-name of the user they’re in reply to. If they don’t they will
+ * still be tweeted, but won’t show up in conversation views.
+ * 
+ * @author Barnaby Walters http://waterpigs.co.uk <barnaby@waterpigs.co.uk>
+ * @since 0.1.4
  */
 class TwitterSyndicator implements EventSubscriberInterface {
     const STRATEGY_SYNDICATE_UNLESS_TAGGED = 'SYNDICATE_UNLESS_TAGGED';
@@ -75,6 +93,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
     public $twitterApiVersion = '1.1';
     
     private $twitterCredentials;
+    private $client;
     
     /**
      * Constructor
@@ -93,6 +112,19 @@ class TwitterSyndicator implements EventSubscriberInterface {
     
     public static function getSubscribedEvents() {
         return ['activitystreams.post.post' => 'syndicateToTwitter'];
+    }
+    
+    /**
+     * Set Guzzle
+     * 
+     * Used internally for testing. Forces `syndicateToTwitter()` to use a mock
+     * object implementing Guzzle\Http\ClientInterface as the client.
+     * 
+     * @param \Guzzle\Http\ClientInterface $client
+     * @internal
+     */
+    public function setGuzzle(\Guzzle\Http\ClientInterface $client) {
+        $this->client = $client;
     }
     
     /**
@@ -150,10 +182,14 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
         
-        $client = new Client('http://api.twitter.com/{version}', [
-            'version' => $this->twitterApiVersion,
-            'ssl.certificate_authority' => 'system',
-        ]);
+        if ($this->client !== null) {
+            $client = $this->client;
+        } else {
+            $client = new Client('http://api.twitter.com/{version}', [
+                'version' => $this->twitterApiVersion,
+                'ssl.certificate_authority' => 'system',
+            ]);
+        }
         
         $oauth = new OauthPlugin(array(
             'consumer_key'    => $this->twitterCredentials['consumerKey'],
