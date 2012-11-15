@@ -10,8 +10,17 @@
     "require": {
     	"tantek/cassis": "*"
     },
+    "require-dev": {
+        "doctrine/orm": "*",
+        "activitystreams/activitystreams": "*",
+        "symfony/event-dispatcher": "2.1.*",
+        "guzzle/guzzle": "*"
+    },
     "suggests": {
-        "doctrine/orm": "*"
+        "doctrine/orm": "To use the JSON type with",
+        "activitystreams/activitystreams": "For POSSE events to work properly",
+        "symfony/event-dispatcher": "For POSSE events to work properly",
+        "guzzle/guzzle": "For HTTP API access in POSSE events to work"
     },
     "minimum-stability": "dev"
 }

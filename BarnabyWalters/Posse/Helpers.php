@@ -45,10 +45,10 @@ class Helpers {
         // Run THE TRUNCENATOR using defaults suitable for twitter
         ob_start();
         $tweet['status'] = Truncenator::truncate(
-                strip_tags(H::expandImg($tweet['status'])),
-                $length = 140,
-                $uri = $url,
-                $urilen = 20
+            strip_tags(H::expandImg($tweet['status'])),
+            $length = 140,
+            $uri = $url,
+            $urilen = 20
         );
         ob_end_clean();
 
