@@ -188,7 +188,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         if ($this->client !== null) {
             $client = $this->client;
         } else {
-            $client = new Client('http://api.twitter.com/{version}', array(
+            $client = new Client('https://api.twitter.com/{version}', array(
                 'version' => $this->twitterApiVersion,
                 'ssl.certificate_authority' => 'system',
             ));
