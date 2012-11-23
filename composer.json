@@ -20,7 +20,8 @@
         "doctrine/orm": "To use the JSON type with",
         "activitystreams/activitystreams": "For POSSE events to work properly",
         "symfony/event-dispatcher": "For POSSE events to work properly",
-        "guzzle/guzzle": "For HTTP API access in POSSE events to work"
+        "guzzle/guzzle": "For HTTP API access in POSSE events to work",
+        "monolog/monolog": "For logging"
     },
     "minimum-stability": "dev"
 }

@@ -2,13 +2,14 @@
 
 namespace BarnabyWalters\Posse\EventListener;
 
-use BarnabyWalters\Posse\Helpers;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\Event;
-use ActivityStreams\Event\ActivityEvent;
 use ActivityStreams\ActivityStreams\ObjectInterface;
+use ActivityStreams\Event\ActivityEvent;
+use BarnabyWalters\Posse\Helpers;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
+use Monolog\Logger;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * TwitterSyndicator
@@ -94,6 +95,12 @@ class TwitterSyndicator implements EventSubscriberInterface {
     
     private $twitterCredentials;
     private $client;
+    /** @var Logger */
+    private $logger;
+    
+    public static function getSubscribedEvents() {
+        return array('activitystreams.post.post' => 'syndicateToTwitter');
+    }
     
     /**
      * Constructor
@@ -111,8 +118,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
             $this->twitterCredentials = $config['twitterCredentials'];
     }
     
-    public static function getSubscribedEvents() {
-        return array('activitystreams.post.post' => 'syndicateToTwitter');
+    public function setLogger(Logger $logger) {
+        $this->logger = $logger;
     }
     
     /**
@@ -185,12 +192,15 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
         
+        if ($this->logger !== null)
+            $this->logger->info("Built Twitter Query", $twitterApiQuery);
+        
         if ($this->client !== null) {
             $client = $this->client;
         } else {
-            $client = new Client('https://api.twitter.com/{version}', array(
+            $client = new Client('https://api.twitter.com/{version}/', array(
                 'version' => $this->twitterApiVersion,
-                'ssl.certificate_authority' => 'system',
+                'ssl.certificate_authority' => 'system'
             ));
         }
         
@@ -203,9 +213,12 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $client->addSubscriber($oauth);
         
         // Syndicate to twitter
-        $request = $client->post('statuses/update', null, $twitterApiQuery);
+        $request = $client->post('statuses/update.json', null, $twitterApiQuery);
         $response = $request->send();
         $tweet = $response->json();
+        
+        if ($this->logger !== null)
+            $this->logger->info('Received response', $tweet);
         
         // Add the id and a generated URL for the tweet to $object.downstreamCopies
         $tweetId = $tweet['id_str'];
