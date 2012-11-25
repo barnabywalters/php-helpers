@@ -181,6 +181,9 @@ class TwitterSyndicator implements EventSubscriberInterface {
         if (!$syndicating)
             return 'Object is not a syndication candidate';
         
+        // Remove syndication tag as it’s transient
+        $object->setTags(array_diff($tags, array($this->tag)));
+        
         // We’re syndicating!
         $content = $object->getContent() ?: $object->getSummary();
         $url = $object->getUrl();
