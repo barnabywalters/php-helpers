@@ -4,6 +4,8 @@ namespace BarnabyWalters\Posse;
 
 use BarnabyWalters\Helpers\Helpers as H;
 use BarnabyWalters\Posse\Truncenator;
+use DOMDocument;
+use DOMXPath;
 
 /**
  * Description of Helpers
@@ -38,9 +40,8 @@ class Helpers {
     public static function prepareForTwitter($text, $url = null, $inReplyTo = null) {
         // Create the tweet array
         $tweet = array();
-        // We'd prefer the raw summary as it has twitter names (not HTML h-cards),
-        // but if that doesn't exist just strip tags out of the activity summary
-        $tweet['status'] = $text;
+        
+        $tweet['status'] = self::convertHtmlToTwitterSyntax($text);
 
         // Run THE TRUNCENATOR using defaults suitable for twitter
         ob_start();
@@ -62,6 +63,37 @@ class Helpers {
         }
 
         return $tweet;
+    }
+    
+    
+    public static function convertHtmlToTwitterSyntax($text) {
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom->loadHTML(mb_convert_encoding($text, 'HTML-ENTITIES', 'UTF-8'));
+        $xpath = new DOMXPath($dom);
+        
+        $atNamedElements = $xpath->query('//*[@data-at-name]');
+        foreach ($atNamedElements as $e) {
+            $atName = $e->getAttribute('data-at-name');
+            $e->nodeValue = '@' . ltrim($atName, ' @');
+        }
+        
+        $emElements = $xpath->query('//em');
+        foreach ($emElements as $e) {
+            $e->nodeValue = '*' . $e->nodeValue . '*';
+        }
+        
+        $strongElements = $xpath->query('//strong');
+        foreach ($strongElements as $e) {
+            $e->nodeValue = '**' . $e->nodeValue . '**';
+        }
+        
+        $blockquoteSmallElements = $xpath->query('//blockquote/small');
+        foreach ($blockquoteSmallElements as $e) {
+            $e->nodeValue = ' — ' . ltrim($e->nodeValue);
+        }
+        
+        return $dom->C14N(true, false, array('query' => '//text()'));
     }
 }
 

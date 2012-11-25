@@ -28,6 +28,34 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(strlen($result['status']) <= 140);
         $this->assertEquals('100', $result['in_reply_to_status_id']);
     }
+    
+    public function testRevertsAtNamedElements() {
+        $text = 'Here is some text with an auto-h-carded element: <span class="h-card" data-at-name="someguy">Some Guy’s Name</span>';
+        $expected = 'Here is some text with an auto-h-carded element: @someguy';
+        
+        $this->assertEquals($expected, Helpers::convertHtmlToTwitterSyntax($text));
+    }
+    
+    public function testReplacesEmWithAsterisks() {
+        $text = 'Here is some text with an <em>emphasised</em> word';
+        $expected = 'Here is some text with an *emphasised* word';
+        
+        $this->assertEquals($expected, Helpers::convertHtmlToTwitterSyntax($text));
+    }
+    
+    public function testReplacesStrongWithAsterisks() {
+        $text = 'Here is some text with an <strong>emphasised</strong> word';
+        $expected = 'Here is some text with an **emphasised** word';
+        
+        $this->assertEquals($expected, Helpers::convertHtmlToTwitterSyntax($text));
+    }
+    
+    public function testAddsHyphenToBlockquoteSmallPattern() {
+        $text = 'OH <blockquote>“This is some quote”<small>Name</small></blockquote>';
+        $expected = 'OH “This is some quote” — Name';
+        
+        $this->assertEquals($expected, Helpers::convertHtmlToTwitterSyntax($text));
+    }
 }
 
 // EOF
