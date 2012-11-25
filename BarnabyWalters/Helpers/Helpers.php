@@ -50,6 +50,19 @@ class Helpers {
             return parse_url($uri, PHP_URL_HOST);
         }
     }
+    
+    /**
+     * Same Hostname
+     * 
+     * Checks whether or not two given URLs have the same hostname
+     * 
+     * @param string $a
+     * @param string $b
+     * @return bool Whether or not a and b share a hostname
+     */
+    public static function sameHostname($a, $b) {
+        return (parse_url($a, PHP_URL_HOST) == parse_url($b, PHP_URL_HOST));
+    }
 
     /**
      * Replace <img> elements with their @href
