@@ -29,6 +29,26 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('100', $result['in_reply_to_status_id']);
     }
     
+    public function testFullConvertHtmlToTwitterSyntaxExample() {
+        $text = <<<EOD
+<p>Let’s try them out: <em>emphasised</em>, <strong>strong</strong>,</p>
+
+<blockquote>“Some quote” <small><a class="auto-link" href="http://twitter.com/barnabywalters"><a class="h-card" rel="me" href="http://waterpigs.co.uk" data-at-name="barnabywalters">Barnaby Walters</a></a></small></blockquote>
+
+<p><a rel="tag" href="/tags/indieweb">#indieweb</a></p>
+EOD;
+        $expected = <<<EOD
+Let’s try them out: *emphasised*, **strong**,
+
+“Some quote” — @barnabywalters
+
+#indieweb
+EOD;
+        
+        
+        $this->assertEquals($expected, Helpers::convertHtmlToTwitterSyntax($text));
+    }
+    
     public function testRevertsAtNamedElements() {
         $text = 'Here is some text with an auto-h-carded element: <span class="h-card" data-at-name="someguy">Some Guy’s Name</span>';
         $expected = 'Here is some text with an auto-h-carded element: @someguy';

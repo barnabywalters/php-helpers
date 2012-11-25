@@ -67,6 +67,7 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
         
         $object = new Object();
         $object->setTags($tags);
+        $object->setContent('Dummy content');
         $event = new ActivityEvent('post', $object);
         
         $this->assertSame($expected, $t->syndicateToTwitter($event));
@@ -108,6 +109,7 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
         
         $object = new Object();
         $object->setTags(array('tweet'));
+        $object->setContent('Dummy content');
         $event = new ActivityEvent('post', $object);
         
         $t->syndicateToTwitter($event);

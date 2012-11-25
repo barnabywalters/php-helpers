@@ -90,7 +90,7 @@ class Helpers {
         
         $blockquoteSmallElements = $xpath->query('//blockquote/small');
         foreach ($blockquoteSmallElements as $e) {
-            $e->nodeValue = ' — ' . ltrim($e->nodeValue);
+            $e->nodeValue = '— ' . ltrim($e->nodeValue);
         }
         
         return $dom->C14N(true, false, array('query' => '//text()'));
