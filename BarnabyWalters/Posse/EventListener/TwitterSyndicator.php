@@ -216,7 +216,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $client->addSubscriber($oauth);
         
         // Syndicate to twitter
-        $request = $client->post('statuses/update.json', null, $twitterApiQuery);
+        $request = $client->post('statuses/update.json')
+                ->addPostFields($twitterApiQuery);
         $response = $request->send();
         $tweet = $response->json();
         
