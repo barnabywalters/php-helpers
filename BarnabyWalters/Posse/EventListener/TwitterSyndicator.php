@@ -4,6 +4,7 @@ namespace BarnabyWalters\Posse\EventListener;
 
 use ActivityStreams\ActivityStreams\ObjectInterface;
 use ActivityStreams\Event\ActivityEvent;
+use ActivityStreams\Event\ActivityEvents;
 use BarnabyWalters\Posse\Helpers;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
@@ -99,8 +100,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
     private $logger;
     
     public static function getSubscribedEvents() {
-        // Syndication Guarantee State is 0, call before then
-        return array('activitystreams.post.post' => array('syndicateToTwitter', 10));
+        return array('activitystreams.post.post' => array('syndicateToTwitter', ActivityEvents::POST_POST_GUARANTEE_SYNDICATED + 10));
     }
     
     /**
