@@ -1,5 +1,5 @@
 {
-    "hash": "d92c624b95fef3d904154c85aa49c2bb",
+    "hash": "1a9222a0de2a412050fce6e4261d4b7e",
     "packages": [
         {
             "name": "tantek/cassis",
@@ -7,15 +7,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tantek/cassis",
-                "reference": "b727baee474b2c11c896dcd7a2bcd287f39c475f"
+                "reference": "fb83bead966f4ec54ed26e185545f751de734011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/tantek/cassis/archive/b727baee474b2c11c896dcd7a2bcd287f39c475f.zip",
-                "reference": "b727baee474b2c11c896dcd7a2bcd287f39c475f",
+                "url": "https://github.com/tantek/cassis/archive/fb83bead966f4ec54ed26e185545f751de734011.zip",
+                "reference": "fb83bead966f4ec54ed26e185545f751de734011",
                 "shasum": ""
             },
-            "time": "1352312988",
+            "time": "1353913718",
             "type": "library",
             "installation-source": "source",
             "autoload": {
