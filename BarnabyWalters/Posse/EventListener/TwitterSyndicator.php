@@ -161,12 +161,12 @@ class TwitterSyndicator implements EventSubscriberInterface {
             return 'Not an ActivityEvent';
         
         /* @var $object ObjectInterface */
-        $object = $event->getObject();
+        $object = $event['object'];
         
-        if (!method_exists($object, 'getTags'))
-            return 'Object has no getTags() method';
+        if (!array_key_exists('tags', $object))
+            return 'Object has tags so cannot determine whether or not to syndicate';
         
-        $tags = $object->getTags();
+        $tags = $object['tags'];
         
         if (!is_array($tags))
             return 'Tags are not an array';
@@ -183,14 +183,14 @@ class TwitterSyndicator implements EventSubscriberInterface {
             return 'Object is not a syndication candidate';
         
         // Remove syndication tag as it’s transient
-        $object->setTags(array_diff($tags, array($this->tag)));
+        $object['tags'] = array_diff($tags, array($this->tag));
         
         // We’re syndicating!
-        $content = $object->getContent() ?: $object->getSummary();
-        $url = $object->getUrl();
+        $content = $object['content'] ?: $object['summary'];
+        $url = $object['url'];
         
-        if (method_exists($object, 'getInReplyTo'))
-            $inReplyTo = $object->getInReplyTo();
+        if (array_key_exists('inReplyTo', $object))
+            $inReplyTo = $object['inReplyTo'];
         else
             $inReplyTo = null;
         
@@ -248,20 +248,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/statuses/' . $tweetId;
         
-        if (method_exists($object, 'addDownstreamDuplicate')) {
-            $object->addDownstreamDuplicate($tweetUrl);
-            return true;
-        }
-        
-        // Otherwise, manually add it if permitted
-        if (method_exists($object, 'getDownstreamDuplicates')
-        and method_exists($object, 'setDownstreamDuplicates')) {
-            $copies = $object->getDownstreamDuplicates();
-            array_push($copies, $tweetUrl);
-            var_dump($copies);
-            $object->setDownstreamDuplicates($copies);
-            return true;
-        }
+        $object->addDownstreamDuplicate($tweetUrl);
         
         return true;
     }

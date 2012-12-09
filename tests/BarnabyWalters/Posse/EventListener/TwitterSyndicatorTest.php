@@ -23,8 +23,8 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
     
     public function testsReturnsErrorIfObjectHasNoTags() {
         $t = new TwitterSyndicator();
-        $object = new Object();
-        $object->tags = 'non-array';
+        $object = new Object('note');
+        $object['tags'] = 'non-array';
         $event = new ActivityEvent('post', $object);
         
         $this->assertEquals('Tags are not an array', $t->syndicateToTwitter($event));
@@ -32,8 +32,8 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoesntSyndicateForIfStrategyAndNotTagged() {
         $t = new TwitterSyndicator();
-        $object = new Object();
-        $object->setTags(array('random tag', 'another tag'));
+        $object = new Object('note');
+        $object['tags'] = array('random tag', 'another tag');
         $event = new ActivityEvent('post', $object);
         
         $this->assertEquals('Object is not a syndication candidate', $t->syndicateToTwitter($event));
@@ -41,8 +41,8 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
     
     public function testDoesntSyndicateForUnlessStrategyAndTagged() {
         $t = new TwitterSyndicator(array('strategy' => 'syndicate unless tagged'));
-        $object = new Object();
-        $object->setTags(array('tweet'));
+        $object = new Object('note');
+        $object['tags'] = array('tweet');
         $event = new ActivityEvent('post', $object);
         
         $this->assertEquals('Object is not a syndication candidate', $t->syndicateToTwitter($event));
@@ -65,9 +65,10 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
         $mockClient->addSubscriber($mock);
         $t->setGuzzle($mockClient);
         
-        $object = new Object();
-        $object->setTags($tags);
-        $object->setContent('Dummy content');
+        $object = new Object('note');
+        $object['tags'] = $tags;
+        $object['content'] = 'Dummy content';
+        $object['url'] = 'http://example.org/dummy/url';
         $event = new ActivityEvent('post', $object);
         
         $this->assertSame($expected, $t->syndicateToTwitter($event));
@@ -107,16 +108,17 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
         $mockClient->addSubscriber($mock);
         $t->setGuzzle($mockClient);
         
-        $object = new Object();
-        $object->setTags(array('tweet'));
-        $object->setContent('Dummy content');
+        $object = new Object('note');
+        $object['tags'] = array('tweet');
+        $object['content'] = 'Dummy content';
+        $object['url'] = 'http://example.org/dummy/url/again';
         $event = new ActivityEvent('post', $object);
         
         $t->syndicateToTwitter($event);
         
         $tweetUrl = 'https://twitter.com/username/statuses/12345678';
         
-        $this->assertContains($tweetUrl, $object->getDownstreamDuplicates());
+        $this->assertContains($tweetUrl, $object['downstreamDuplicates']);
     }
 }
 
