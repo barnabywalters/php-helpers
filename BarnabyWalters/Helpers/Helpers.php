@@ -133,9 +133,7 @@ class Helpers {
             DateTime $dateTime,
             DateTime $comparison = null,
             array $attrs = []) {
-        if ($comparison == null)
-            $comparison = Carbon::now();
-        else
+        if ($comparison !== null)
             $comparison = Carbon::instance($comparison);
         
         /** @var Carbon */
