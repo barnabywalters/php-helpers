@@ -119,6 +119,16 @@ class Helpers {
         return $t;
     }
     
+    /**
+     * Get Relative Time Element
+     * 
+     * @todo write tests
+     * 
+     * @param DateTime $dateTime The datetime in question
+     * @param DateTime $comparison Date to compare with. Defaults to now
+     * @param array $attrs Assoc array of attributes to add to the element
+     * @return string The time HTML element with human value inside
+     */
     public static function relativeTimeElement(
             DateTime $dateTime,
             DateTime $comparison = null,
