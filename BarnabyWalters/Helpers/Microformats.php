@@ -8,7 +8,34 @@ namespace BarnabyWalters\Helpers;
  * @author Barnaby Walters
  */
 class Microformats {
-
+    
+    /**
+     * Inline h-card
+     * 
+     * @param array $hcard
+     * @return string
+     */
+    public static function inlineHCard(array $hcard) {
+        $out = '';
+        $p = $hcard['properties'];
+        
+        if (array_key_exists('url', $p))
+            $out .= '<a class="h-card" href="' . $p['url'] . '">';
+        else
+            $out .= '<span class="h-card">';
+        
+        if (array_key_exists('photo', $p))
+            $out .= '<img src="' . $p['photo'] . '" alt="" />';
+        
+        $out .= $p['name'];
+        
+        $out .= array_key_exists('url', $p)
+                ? '</a>'
+                : '</span>';
+        
+        return $out;
+    }
+    
     /**
      * Normalise h-entry Dates
      * 
