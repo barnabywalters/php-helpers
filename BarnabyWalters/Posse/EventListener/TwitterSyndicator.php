@@ -163,13 +163,19 @@ class TwitterSyndicator implements EventSubscriberInterface {
         /* @var $object ObjectInterface */
         $object = $event['object'];
         
-        if (!array_key_exists('tags', $object))
+        if (!array_key_exists('tags', $object)) {
+            if ($this->logger != null)
+                $this->logger->err('Object has tags so cannot determine whether or not to syndicate');
             return 'Object has tags so cannot determine whether or not to syndicate';
+        }
         
         $tags = $object['tags'];
         
-        if (!is_array($tags))
+        if (!is_array($tags)) {
+            if ($this->logger != null)
+                $this->logger->err('Tags are not an array');
             return 'Tags are not an array';
+        }
         
         $syndicating = false;
         
@@ -179,8 +185,11 @@ class TwitterSyndicator implements EventSubscriberInterface {
             and !in_array($this->tag, $tags))
                 $syndicating = true;
         
-        if (!$syndicating)
+        if (!$syndicating) {
+            if ($this->logger != null)
+                $this->logger->info('Object is not a syndication candidate');
             return 'Object is not a syndication candidate';
+        }
         
         // Remove syndication tag as it’s transient
         $object['tags'] = array_diff($tags, array($this->tag));
@@ -196,10 +205,10 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
         
-        if ($this->logger !== null)
+        if ($this->logger != null)
             $this->logger->info("Built Twitter Query", $twitterApiQuery);
         
-        if ($this->client !== null) {
+        if ($this->client != null) {
             $client = $this->client;
         } else {
             $client = new Client('https://api.twitter.com/{version}/', array(
@@ -239,7 +248,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $tweet = $response->json();
         
-        if ($this->logger !== null)
+        if ($this->logger != null)
             $this->logger->info('Received response', $tweet);
         
         // Add the id and a generated URL for the tweet to $object.downstreamCopies
