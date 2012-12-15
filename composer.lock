@@ -1,6 +1,49 @@
 {
-    "hash": "78114958e7bf6b0428a22c0e3666a5e6",
+    "hash": "6c4f919024f21881afb910589d2b2023",
     "packages": [
+        {
+            "name": "nesbot/carbon",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/briannesbitt/Carbon.git",
+                "reference": "1.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/briannesbitt/Carbon/archive/1.2.0.zip",
+                "reference": "1.2.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-10-15 00:41:18",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Carbon": "."
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Nesbitt",
+                    "email": "brian@nesbot.com",
+                    "homepage": "http://nesbot.com"
+                }
+            ],
+            "description": "A simple API extension for DateTime.",
+            "homepage": "https://github.com/briannesbitt/Carbon",
+            "keywords": [
+                "time",
+                "date",
+                "datetime"
+            ]
+        },
         {
             "name": "tantek/cassis",
             "version": "dev-master",
@@ -32,19 +75,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/barnabywalters/php-activitystreams",
-                "reference": "8a7f439c573525d76ed0f5be780a60ef48bd95a7"
+                "reference": "c3288321d074932d95f91b3433e3571919473bb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/barnabywalters/php-activitystreams/archive/8a7f439c573525d76ed0f5be780a60ef48bd95a7.zip",
-                "reference": "8a7f439c573525d76ed0f5be780a60ef48bd95a7",
+                "url": "https://github.com/barnabywalters/php-activitystreams/archive/c3288321d074932d95f91b3433e3571919473bb3.zip",
+                "reference": "c3288321d074932d95f91b3433e3571919473bb3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
                 "symfony/http-foundation": "2.1.*"
             },
-            "time": "2012-12-09 21:12:08",
+            "time": "2012-12-09 21:45:55",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -137,19 +180,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal",
-                "reference": "2e2336a6c1c3dd3897f9419df9675a5fb0a0edda"
+                "reference": "74c7616132ad82420320e76fa49781ee2f6af532"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/dbal/archive/2e2336a6c1c3dd3897f9419df9675a5fb0a0edda.zip",
-                "reference": "2e2336a6c1c3dd3897f9419df9675a5fb0a0edda",
+                "url": "https://github.com/doctrine/dbal/archive/74c7616132ad82420320e76fa49781ee2f6af532.zip",
+                "reference": "74c7616132ad82420320e76fa49781ee2f6af532",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "doctrine/common": ">=2.3-dev,<2.5-dev"
             },
-            "time": "2012-11-30 21:33:17",
+            "time": "2012-12-11 16:41:50",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -270,12 +313,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle",
-                "reference": "c3a9ce0be6cdd73229baafaa41ec59c58134f72f"
+                "reference": "cc9beb31626cb776a20536f5903e8ab2ec2a3707"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/guzzle/guzzle/archive/c3a9ce0be6cdd73229baafaa41ec59c58134f72f.zip",
-                "reference": "c3a9ce0be6cdd73229baafaa41ec59c58134f72f",
+                "url": "https://github.com/guzzle/guzzle/archive/cc9beb31626cb776a20536f5903e8ab2ec2a3707.zip",
+                "reference": "cc9beb31626cb776a20536f5903e8ab2ec2a3707",
                 "shasum": ""
             },
             "require": {
@@ -322,8 +365,13 @@
                 "zend/zend-cache": "2.0.0beta3",
                 "zend/zend-log": "2.0.0beta3"
             },
-            "time": "2012-12-07 01:20:23",
+            "time": "2012-12-14 00:49:17",
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
             "installation-source": "source",
             "autoload": {
                 "psr-0": {
@@ -364,18 +412,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "236c4d50d364c21bafa46e35aaf4fd38eec63e66"
+                "reference": "92cd0e84022f31287337ab17842bbfff47d2fc79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/236c4d50d364c21bafa46e35aaf4fd38eec63e66.zip",
-                "reference": "236c4d50d364c21bafa46e35aaf4fd38eec63e66",
+                "url": "https://github.com/symfony/Console/archive/92cd0e84022f31287337ab17842bbfff47d2fc79.zip",
+                "reference": "92cd0e84022f31287337ab17842bbfff47d2fc79",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-03 22:00:56",
+            "time": "2012-12-14 09:43:16",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -460,18 +508,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "9c7a0f06d7d6318ed973b9723d684c261b49b554"
+                "reference": "e39568eeae07b43af51402097acef64d2c67642d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/9c7a0f06d7d6318ed973b9723d684c261b49b554.zip",
-                "reference": "9c7a0f06d7d6318ed973b9723d684c261b49b554",
+                "url": "https://github.com/symfony/HttpFoundation/archive/e39568eeae07b43af51402097acef64d2c67642d.zip",
+                "reference": "e39568eeae07b43af51402097acef64d2c67642d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-07 09:29:55",
+            "time": "2012-12-13 21:21:49",
             "type": "library",
             "installation-source": "source",
             "autoload": {

@@ -8,7 +8,8 @@
         }
     },
     "require": {
-    	"tantek/cassis": "*"
+    	"tantek/cassis": "*",
+        "nesbot/Carbon": "*"
     },
     "require-dev": {
         "doctrine/orm": "*",

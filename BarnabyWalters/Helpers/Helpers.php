@@ -2,6 +2,9 @@
 
 namespace BarnabyWalters\Helpers;
 
+use Carbon\Carbon;
+use DateTime;
+
 /**
  * Functional Helpers
  *
@@ -114,6 +117,15 @@ class Helpers {
     public static function timeElement($datetime) {
         $t = '<time datetime="' . $datetime->format('Y-m-d') . '" title="' . $datetime->format('Y-z') . '">' . $datetime->format('Y-m-d') . '</time>';
         return $t;
+    }
+    
+    public static function relativeTimeElement(
+            DateTime $datetime,
+            DateTime $comparison = null) {
+        if ($comparison == null)
+            $comparison = Carbon::now();
+        
+        
     }
 
     /**
