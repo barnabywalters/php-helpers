@@ -19,6 +19,11 @@ class Microformats {
         $out = '';
         $p = $hcard['properties'];
         
+        foreach ($p as $key => $prop) {
+            if (is_array($prop))
+                $p['key'] = $prop[0];
+        }
+        
         if (array_key_exists('url', $p))
             $out .= '<a class="h-card" href="' . $p['url'] . '">';
         else
