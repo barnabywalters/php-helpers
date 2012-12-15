@@ -17,7 +17,7 @@ class Microformats {
      */
     public static function inlineHCard(array $hcard) {
         $out = '';
-        $p = $hcard['properties'];
+        $p = (array) $hcard['properties'];
         
         foreach ($p as $key => $prop) {
             if (is_array($prop))
