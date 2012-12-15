@@ -178,6 +178,24 @@ class Helpers {
 
         return $clean;
     }
+    
+    /**
+     * Humanise String
+     * 
+     * Makes a slugified/ASCIIfied string nice again
+     * 
+     * @todo make this happen for CamelCase too?
+     * @todo add more intelligent dash/underscore selection
+     * 
+     * @param string $string
+     * @return string
+     */
+    public static function humanise($string) {
+        $spacedOut = str_replace(['-', '_'], ' ', $string);
+        $talkingInCaps = ucwords($spacedOut);
+        
+        return trim($talkingInCaps);
+    }
 
     /**
      * Tagstring to Array
