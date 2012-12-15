@@ -120,12 +120,25 @@ class Helpers {
     }
     
     public static function relativeTimeElement(
-            DateTime $datetime,
-            DateTime $comparison = null) {
+            DateTime $dateTime,
+            DateTime $comparison = null,
+            array $attrs = []) {
         if ($comparison == null)
             $comparison = Carbon::now();
         
+        /** @var Carbon */
+        $dateTime = Carbon::instance($dateTime);
         
+        $timeElement = '<time ';
+        
+        foreach ($attrs as $attr => $val) {
+            $timeElement .= $attr . '="' . htmlspecialchars($val) . '" ';
+        }
+        
+        $timeElement .= 'datetime="' . $dateTime->toW3CString() . '" >';
+        $timeElement .= $dateTime->diffForHumans($comparison) . '</time>';
+        
+        return $timeElement;
     }
 
     /**
