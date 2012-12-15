@@ -30,7 +30,7 @@ class Microformats {
             $out .= '<span class="h-card">';
         
         if (array_key_exists('photo', $p))
-            $out .= '<img src="' . $p['photo'] . '" alt="" />';
+            $out .= '<img src="' . $p['photo'] . '" alt="" /> ';
         
         $out .= $p['name'];
         
