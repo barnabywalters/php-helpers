@@ -163,10 +163,10 @@ class TwitterSyndicator implements EventSubscriberInterface {
         /* @var $object ObjectInterface */
         $object = $event['object'];
         
-        if (!array_key_exists('tags', $object)) {
+        if (empty($object['tags'])) {
             if ($this->logger != null)
-                $this->logger->err('Object has tags so cannot determine whether or not to syndicate');
-            return 'Object has tags so cannot determine whether or not to syndicate';
+                $this->logger->err('Object has no tags so cannot determine whether or not to syndicate');
+            return 'Object has no tags so cannot determine whether or not to syndicate';
         }
         
         $tags = $object['tags'];
