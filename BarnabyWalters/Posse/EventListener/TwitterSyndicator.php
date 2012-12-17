@@ -137,6 +137,43 @@ class TwitterSyndicator implements EventSubscriberInterface {
     }
     
     /**
+     * Summarise Object
+     * 
+     * Given an ActivityStreams Object, produce a string which summarises it.
+     * 
+     * Typically this takes the form of:
+     * 
+     *     Title: Summary
+     *     Content
+     * 
+     * …where any one of the components is optional.
+     * 
+     * This function performs no truncation at any stage. Use THE TRUNCENATOR or
+     * similar for that.
+     * 
+     * @param \ActivityStreams\ActivityStreams\ObjectInterface $object
+     * @return string
+     */
+    public static function summariseObject(ObjectInterface $object) {
+        $out = '';
+        
+        if (!empty($object['title']))
+            $out .= trim($object['title']);
+        
+        if (!empty($object['summary'])
+         or !empty($object['content']))
+            $out .= ': ';
+        
+        if (!empty($object['summary']))
+            $out .= $object['summary'];
+        
+        if (!empty($object['content']))
+            $out .= "\n" . $object['content'];
+        
+        return $out;
+    }
+    
+    /**
      * Syndicate To Twitter
      * 
      * Checks to see if the content is designated to be syndicated, syndicates 
@@ -195,7 +232,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $object['tags'] = array_diff($tags, array($this->tag));
         
         // We’re syndicating!
-        $content = $object['content'] ?: $object['summary'];
+        $content = self::summariseObject($object);
         $url = $object['url'];
         
         if (array_key_exists('inReplyTo', $object))
