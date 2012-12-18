@@ -160,8 +160,9 @@ class TwitterSyndicator implements EventSubscriberInterface {
         if (!empty($object['title']))
             $out .= trim($object['title']);
         
-        if (!empty($object['summary'])
-         or !empty($object['content']))
+        if (!empty($object['title']) and
+                (!empty($object['summary'])
+             or !empty($object['content'])))
             $out .= ': ';
         
         if (!empty($object['summary']))
@@ -170,7 +171,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         if (!empty($object['content']))
             $out .= "\n" . $object['content'];
         
-        return $out;
+        return trim($out);
     }
     
     /**
