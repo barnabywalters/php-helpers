@@ -116,7 +116,7 @@ class TwitterSyndicatorTest extends \PHPUnit_Framework_TestCase {
         
         $t->syndicateToTwitter($event);
         
-        $tweetUrl = 'https://twitter.com/username/statuses/12345678';
+        $tweetUrl = 'https://twitter.com/username/status/12345678';
         
         $this->assertContains($tweetUrl, $object['downstreamDuplicates']);
     }

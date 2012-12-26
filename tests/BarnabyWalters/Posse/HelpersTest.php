@@ -21,7 +21,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
     public function testPrepareContentForTwitter() {
         $text = 'Lots and lots and lots of very long text Lots and lots and lots of very long text Lots and lots and lots of very long text';
         $url = 'http://example.com';
-        $inReplyTo = 'https://twitter.com/someuser/statuses/100';
+        $inReplyTo = 'https://twitter.com/someuser/status/100';
         
         $result = Helpers::prepareForTwitter($text, $url, $inReplyTo);
         
