@@ -55,7 +55,7 @@ class Helpers {
 
         if ($inReplyTo !== null) {
             // Check if there’s a twitter status ID in the URL to use
-            $tweetPattern = '/https?:\/\/twitter.com\/[a-zA-Z_]{1,20}\/statuses\/([0-9]*)/';
+            $tweetPattern = '/https?:\/\/twitter.com\/[a-zA-Z_]{1,20}\/status\/([0-9]*)/';
             $matches = array();
             preg_match($tweetPattern, $inReplyTo, $matches);
             
