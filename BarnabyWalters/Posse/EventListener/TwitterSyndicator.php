@@ -238,7 +238,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $content = self::summariseObject($object);
         $url = $object['url'];
         
-        if (array_key_exists('inReplyTo', $object))
+        if (!empty($object['inReplyTo']))
             $inReplyTo = $object['inReplyTo'];
         else
             $inReplyTo = null;
