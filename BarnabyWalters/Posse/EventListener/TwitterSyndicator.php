@@ -151,6 +151,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
      * This function performs no truncation at any stage. Use THE TRUNCENATOR or
      * similar for that.
      * 
+     * @todo write tests
+     * 
      * @param \ActivityStreams\ActivityStreams\ObjectInterface $object
      * @return string
      */
