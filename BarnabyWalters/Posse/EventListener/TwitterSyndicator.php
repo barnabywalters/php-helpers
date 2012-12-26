@@ -295,7 +295,7 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $tweetId = $tweet['id_str'];
         $tweetUserHandle = $tweet['user']['screen_name'];
         
-        $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/statuses/' . $tweetId;
+        $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/status/' . $tweetId;
         
         $object->addDownstreamDuplicate($tweetUrl);
         
