@@ -253,7 +253,7 @@ class Helpers {
             $key = array_shift($parts);
             
             if ($namespace !== null and $trunc) {
-                $key = substr($key, strlen($namespace));
+                $key = substr($key, strlen($namespace) + 1);
             }
             
             $value = implode('=', $parts);

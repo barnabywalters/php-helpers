@@ -97,7 +97,84 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
         $testResult = array('a tag', 'anothertag', '&lt;sometag&gt;');
         $this->assertEquals($testResult, H::tagstringToArray($testTagstring));
     }
+    
+    /**
+     * @group unit
+     * @group text
+     * @group helpers
+     */
+    public function testGetMachineTagsIgnoresNonMachineTags() {
+        $arr = [
+            'machine:tag=yes!',
+            'non-machine-tag'
+        ];
+        
+        $result = H::getMachineTags($arr);
+        
+        $this->assertNotContains('non-machine-tag', $result);
+    }
+    
+    /**
+     * @group unit
+     * @group text
+     * @group helpers
+     */
+    public function testGetMachineTagsReturnsAssocArray() {
+        $arr = [
+            'machine:tag=yes!',
+            'another:tag=BOO'
+        ];
+        
+        $expected = [
+            'machine:tag' => 'yes!',
+            'another:tag' => 'BOO'
+        ];
+        
+        $result = H::getMachineTags($arr);
+        
+        $this->assertEquals($result, $expected);
+    }
 
+    /**
+     * @group unit
+     * @group text
+     * @group helpers
+     */
+    public function testGetMachineTagsFiltersByNamespace() {
+        $arr = [
+            'machine:tag=yes!',
+            'another:tag=BOO'
+        ];
+        
+        $expected = [
+            'machine:tag' => 'yes!'
+        ];
+        
+        $result = H::getMachineTags($arr, 'machine');
+        
+        $this->assertEquals($result, $expected);
+    }
+    
+    /**
+     * @group unit
+     * @group text
+     * @group helpers
+     */
+    public function testGetMachineTagsTruncatesNamespace() {
+        $arr = [
+            'machine:tag=yes!',
+            'another:tag=BOO'
+        ];
+        
+        $expected = [
+            'tag' => 'yes!'
+        ];
+        
+        $result = H::getMachineTags($arr, 'machine', true);
+        
+        $this->assertEquals($result, $expected);
+    }
+    
     /**
      * @group unit
      * @group text
