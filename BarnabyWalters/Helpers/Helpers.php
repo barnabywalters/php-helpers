@@ -213,6 +213,54 @@ class Helpers {
                 }, $tags);
         return $tags;
     }
+    
+    
+    /**
+     * Get Machine Tags
+     * 
+     * Given an array of opaque string tags, return an array of all the machine
+     * tags of format namespace:predicate=value, optionally filtering by 
+     * namespace.
+     * 
+     * If the tags are filtered by namespace and $trunc is set, the namespace 
+     * and following colon are removed from the results.
+     * 
+     * The return value is always an associative array of namespace:predicate => 
+     * value.
+     * 
+     * @param array $tags
+     * @param string $namespace
+     * @param boolean $trunc 
+     * @return array
+     */
+    public static function getMachineTags(array $tags, $namespace = null, $trunc = false) {
+        $filter = $namespace == null
+            ? '[a-zA-Z0-9_-]+'
+            : preg_quote($namespace);
+
+        // Get the machine tags out
+        $machineTags = array_filter($tags, function ($tag) use ($filter) {
+            if (preg_match('/^' . $filter . ':[a-zA-Z0-9_-]+=/', $tag))
+                return true;
+
+            return false;
+        });
+        
+        
+    }
+    
+    /**
+     * h-adr from geo: tags
+     * 
+     * Given an array containing some tags in the geo: namespace, produces a
+     * h-geo and h-adr HTML string containing all the information provided.
+     * 
+     * @param array $tags
+     * @return string HTML with h-geo and h-adr classnames
+     */
+    public static function hAdrFromGeotags(array $tags) {
+        return '';
+    }
 
     /**
      * Clean Tagstring
