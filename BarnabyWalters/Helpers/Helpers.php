@@ -246,7 +246,22 @@ class Helpers {
             return false;
         });
         
+        $parsed = [];
         
+        foreach ($machineTags as $tag) {
+            $parts = explode('=', $tag);
+            $key = array_shift($parts);
+            
+            if ($namespace !== null and $trunc) {
+                $key = substr($key, strlen($namespace));
+            }
+            
+            $value = implode('=', $parts);
+            
+            $parsed[$key] = $value;
+        }
+        
+        return $parsed;
     }
     
     /**
