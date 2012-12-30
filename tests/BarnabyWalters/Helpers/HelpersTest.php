@@ -180,6 +180,25 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
      * @group text
      * @group helpers
      */
+    public function testGetMachineTagsHandlesEqualsSignsInValue() {
+        $arr = [
+            'machine:tag=yes is = to something!',
+        ];
+        
+        $expected = [
+            'machine:tag' => 'yes is = to something!'
+        ];
+        
+        $result = H::getMachineTags($arr);
+        
+        $this->assertEquals($result, $expected);
+    }
+    
+    /**
+     * @group unit
+     * @group text
+     * @group helpers
+     */
     public function testTagstringClean() {
         $testTagstring = 'a tag,   anothertag,	 <sometag>';
         $testResult = 'a tag,anothertag,&lt;sometag&gt;';
