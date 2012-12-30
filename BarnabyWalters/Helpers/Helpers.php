@@ -270,11 +270,57 @@ class Helpers {
      * Given an array containing some tags in the geo: namespace, produces a
      * h-geo and h-adr HTML string containing all the information provided.
      * 
+     * @todo finalise markup, add config options
+     * 
      * @param array $tags
      * @return string HTML with h-geo and h-adr classnames
      */
     public static function hAdrFromGeotags(array $tags) {
-        return '';
+        $tags = self::getMachineTags($tags, 'geo', true);
+        
+        // h-geo
+        // p-latitude and p-longitude
+        if (isset($tags['lat']) and isset($tags['lon']))
+            $geo = '<data class="p-latitude" value="' . $tags['lat'] . '"></data><data class="p-longitude" value="' . $tags['lon'] . '"></data>';
+        
+        // h-adr
+        $adr = [];
+        // p-street-address
+        if (isset($tags['road']))
+            $adr[] = '<span class="p-street-address">' . $tags['road'] . '</span>';
+        elseif (isset($tags['road']) and isset($tags['house_humber']))
+            $adr[] = '<span class="p-street-address">' . $tags['house_number'] . ' ' . $tags['street_address'] . '</span>';
+        
+        // p-locality
+        if (isset($tags['city']))
+            $adr[] = '<span class="p-locality">' . $tags['city'] . '</span>';
+        elseif (isset($tags['suburb']))
+            $adr[] = '<span class="p-locality">' . $tags['suburb'] . '</span>';
+        
+        // p-region
+        if (isset($tags['county']))
+            $adr[] = '<span class="p-region">' . $tags['county']  . '</span>';
+        elseif (isset($tags['state_district']))
+            $adr[] = '<span class="p-region">' . $tags['state_district'] . '</span>';
+        
+        // p-postal-code
+        if (isset($tags['postcode']))
+            $adr[] = '<span class="p-postal-code">' . $tags['postcode'] . '</span>';
+        
+        // p-country-name
+        if (isset($tags['country']))
+            $adr[] = '<span class="p-country-name">' . $tags['country'] . '</span>';
+        
+        // Produce final output
+        $out = '';
+        
+        if ($geo !== null)
+            $out .= '<span class="h-geo">' . $geo . '</span>';
+        
+        if ($adr !== null)
+            $out .= '<span class="h-adr">' . implode(', ', $adr) . '</span>';
+        
+        return trim($out);
     }
 
     /**
