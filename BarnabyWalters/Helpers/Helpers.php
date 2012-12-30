@@ -271,6 +271,8 @@ class Helpers {
      * h-geo and h-adr HTML string containing all the information provided.
      * 
      * @todo finalise markup, add config options
+     * @todo write at least vaguely comprehensive testing
+     * @put conditional multi insert logic into a function of it’s own
      * 
      * @param array $tags
      * @return string HTML with h-geo and h-adr classnames
