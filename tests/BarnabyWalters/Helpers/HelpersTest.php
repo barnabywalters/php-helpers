@@ -295,7 +295,14 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($expected, $result);
     }
-
+    
+    public function testFindUrlsFindsIpAddresses() {
+        $html = 'Blah blah blah 127.0.0.1/notes/711';
+        $expected = ['http://127.0.0.1/notes/711'];
+        $result = H::findUrls($html);
+        
+        $this->assertEquals($expected, $result);
+    }
 }
 
 // EOF
