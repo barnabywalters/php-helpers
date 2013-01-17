@@ -279,10 +279,21 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
      * @group text
      * @group helpers
      */
-    public function testFindURLs() {
+    public function testFindUrlsFindsUrlsInPlaintext() {
         $testString = 'Okay, so this string contains some URLs. http://waterpigs.co.uk, identi.ca, aaron.pk';
         $testArray = array('http://waterpigs.co.uk', 'http://identi.ca', 'http://aaron.pk');
+        
         $this->assertEquals($testArray, H::findUrls($testString));
+    }
+    
+    public function testFindUrlsFindsUrlsInAHref() {
+        $html = '<div class="p-name entry-title p-summary summary e-content entry-content">
+            <p>T5 <a rel="tag" href="/tags/pingback">#pingback</a> mentioning <a href="http://localhost.com/notes/711/">another note</a> <a rel="tag" href="/tags/test">#test</a> <a rel="tag" href="/tags/notweet">#notweet</a></p>
+        </div>';
+        $expected = ['http://localhost.com/notes/711'];
+        $result = H::findUrls($html);
+        
+        $this->assertEquals($expected, $result);
     }
 
 }
