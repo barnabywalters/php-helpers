@@ -552,7 +552,7 @@ class Helpers {
      * @return DOMDocument
      */
     public static function createXmlRpcSuccessResponse($retVal, $asString = true) {
-        $doc = new DOMDocument('1.0');
+        $response = new DOMDocument('1.0');
         $methodResponse = new DOMElement('methodResponse');
         $response->appendChild($methodResponse);
         
@@ -566,9 +566,9 @@ class Helpers {
         $methodResponse->appendChild($params);
         
         if (!$asString)
-            return $doc;
+            return $response;
         else
-            return $doc->saveXML();
+            return $response->saveXML();
     }
     
     /**
@@ -589,12 +589,12 @@ class Helpers {
         
         $doc = new DOMDocument('1.0');
         $methodResponse = new DOMElement('methodResponse');
-        $response->appendChild($methodResponse);
+        $doc->appendChild($methodResponse);
         
-        $int = $response->createElement($type, $fault);
-        $value = $response->createElement('value');
+        $int = $doc->createElement($type, $fault);
+        $value = $doc->createElement('value');
         $value->appendChild($int);
-        $fault = $response->createElement('fault');
+        $fault = $doc->createElement('fault');
         $fault->appendChild($value);
         $methodResponse->appendChild($fault);
         
