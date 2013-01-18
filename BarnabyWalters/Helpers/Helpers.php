@@ -501,7 +501,41 @@ class Helpers {
     public static function stringToHexColour($word) {
         return substr(bin2hex(metaphone($word, 6)), 0, 6);
     }
-
+    
+    /**
+     * Parse XML-RPC Method Call
+     * 
+     * Given an XML-RPC request body, returns an array like this:
+     * 
+     *     [
+     *         'methodName': 'example.ex',
+     *         'params': ['string1', 'string2]
+     *     ]
+     * 
+     * NOTE: Only currently accepts string parameters.
+     * 
+     * @todo Make this handle param types other than `string`
+     * @param string $request
+     */
+    public static function parseXmlRpcMethodCall($request) {
+        $req = new DOMDocument('1.0');
+        $req->loadXML($request);
+        
+        $q = new DOMXPath($req);
+        $methodName = $q->query('/methodCall/methodName')->item(0)->nodeValue;
+        
+        $params = $q->query('/methodCall/params/param/value/string');
+        $paramArray = [];
+        
+        foreach ($params as $node) {
+            $paramArray[] = $node->nodeValue;
+        }
+        
+        return [
+            'methodName' => $methodName,
+            'params' => $paramArray
+        ];
+    }
 }
 
 // EOF Helpers.php
