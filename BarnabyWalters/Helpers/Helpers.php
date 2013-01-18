@@ -4,6 +4,9 @@ namespace BarnabyWalters\Helpers;
 
 use Carbon\Carbon;
 use DateTime;
+use DOMDocument;
+use DOMElement;
+use DOMXPath;
 
 /**
  * Functional Helpers
@@ -516,6 +519,7 @@ class Helpers {
      * 
      * @todo Make this handle param types other than `string`
      * @param string $request
+     * @return array
      */
     public static function parseXmlRpcMethodCall($request) {
         $req = new DOMDocument('1.0');
@@ -537,6 +541,16 @@ class Helpers {
         ];
     }
     
+    /**
+     * Create XML-RPC Success Response
+     * 
+     * Given the value to return (can only be a string at the mo), creates a 
+     * response.
+     * 
+     * @param string $retVal The string to return
+     * @param bool $asString Whether or not to return the respons as a string or DOMDocument
+     * @return DOMDocument
+     */
     public static function createXmlRpcSuccessResponse($retVal, $asString = true) {
         $doc = new DOMDocument('1.0');
         $methodResponse = new DOMElement('methodResponse');
@@ -550,6 +564,39 @@ class Helpers {
         $params = $response->createElement('params');
         $params->appendChild($param);
         $methodResponse->appendChild($params);
+        
+        if (!$asString)
+            return $doc;
+        else
+            return $doc->saveXML();
+    }
+    
+    /**
+     * Create XML-RPC Fault Response
+     * 
+     * Creates an XML-RPC Fault response with either an int or a string as the
+     * fault.
+     * 
+     * @param string|int $fault
+     * @param bool $asString
+     * @return \DOMDocument
+     */
+    public static function createXmlRpcFaultResponse($fault, $asString = true) {
+        if (is_string($fault))
+            $type = 'string';
+        elseif (is_int($fault))
+            $type = 'int';
+        
+        $doc = new DOMDocument('1.0');
+        $methodResponse = new DOMElement('methodResponse');
+        $response->appendChild($methodResponse);
+        
+        $int = $response->createElement($type, $fault);
+        $value = $response->createElement('value');
+        $value->appendChild($int);
+        $fault = $response->createElement('fault');
+        $fault->appendChild($value);
+        $methodResponse->appendChild($fault);
         
         if (!$asString)
             return $doc;
