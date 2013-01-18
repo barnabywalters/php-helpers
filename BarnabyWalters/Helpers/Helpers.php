@@ -536,6 +536,26 @@ class Helpers {
             'params' => $paramArray
         ];
     }
+    
+    public static function createXmlRpcSuccessResponse($retVal, $asString = true) {
+        $doc = new DOMDocument('1.0');
+        $methodResponse = new DOMElement('methodResponse');
+        $response->appendChild($methodResponse);
+        
+        $string = new DOMElement('string', $retVal);
+        $value = $response->createElement('value');
+        $value->appendChild($string);
+        $param = $response->createElement('param');
+        $param->appendChild($value);
+        $params = $response->createElement('params');
+        $params->appendChild($param);
+        $methodResponse->appendChild($params);
+        
+        if (!$asString)
+            return $doc;
+        else
+            return $doc->saveXML();
+    }
 }
 
 // EOF Helpers.php
