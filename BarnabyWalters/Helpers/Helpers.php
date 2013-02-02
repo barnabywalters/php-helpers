@@ -268,6 +268,24 @@ class Helpers {
     }
     
     /**
+     * Get Plain Tags
+     * 
+     * Returns an array of all the non-machine tags in the passed array.
+     * 
+     * @param array $tags
+     * @return array The input with all machine tags removed
+     */
+    public static function getPlainTags(array $tags) {
+        $pattern = '/[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+=.+/';
+        
+        return array_filter($tags, function ($tag) use ($pattern) {
+            return preg_match($pattern, $tag) == 0
+                    ? true
+                    : false;
+        });
+    }
+    
+    /**
      * h-adr from geo: tags
      * 
      * Given an array containing some tags in the geo: namespace, produces a
