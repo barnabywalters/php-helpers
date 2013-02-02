@@ -286,64 +286,56 @@ class Helpers {
     }
     
     /**
-     * h-adr from geo: tags
+     * Microformats from geo: tags
      * 
      * Given an array containing some tags in the geo: namespace, produces a
-     * h-geo and h-adr HTML string containing all the information provided.
-     * 
-     * @todo finalise markup, add config options
-     * @todo write at least vaguely comprehensive testing
-     * @put conditional multi insert logic into a function of it’s own
+     * h-geo and h-adr µf2 array structure from the data available
      * 
      * @param array $tags
-     * @return string HTML with h-geo and h-adr classnames
+     * @return array µf2 array representation of a h-adr composed from the parts
      */
-    public static function hAdrFromGeotags(array $tags) {
+    public static function mfFromGeotags(array $tags) {
         $tags = self::getMachineTags($tags, 'geo', true);
+        $µf2 = ['type' => ['h-adr', 'h-geo']];
+        $out = [];
         
         // h-geo
         // p-latitude and p-longitude
-        if (isset($tags['lat']) and isset($tags['lon']))
-            $geo = '<data class="p-latitude" value="' . $tags['lat'] . '"></data><data class="p-longitude" value="' . $tags['lon'] . '"></data>';
+        if (isset($tags['lat']) and isset($tags['lon'])) {
+            $out['latitude'] = $tags['lat'];
+            $out['longitude'] = $tags['lon'];
+        }
         
         // h-adr
-        $adr = [];
         // p-street-address
-        if (isset($tags['road']))
-            $adr[] = '<span class="p-street-address">' . $tags['road'] . '</span>';
-        elseif (isset($tags['road']) and isset($tags['house_humber']))
-            $adr[] = '<span class="p-street-address">' . $tags['house_number'] . ' ' . $tags['street_address'] . '</span>';
+        if (isset($tags['road']) and isset($tags['house_number']))
+            $out['street-address'] = $tags['house_number'] . ' ' . $tags['road'];
+        elseif (isset($tags['road']))
+            $out['street-address'] = $tags['road'];
         
         // p-locality
         if (isset($tags['city']))
-            $adr[] = '<span class="p-locality">' . $tags['city'] . '</span>';
+            $out['locality'] = $tags['city'];
         elseif (isset($tags['suburb']))
-            $adr[] = '<span class="p-locality">' . $tags['suburb'] . '</span>';
+            $out['locality'] = $tags['suburb'];
         
         // p-region
         if (isset($tags['county']))
-            $adr[] = '<span class="p-region">' . $tags['county']  . '</span>';
+            $out['region'] = $tags['county'];
         elseif (isset($tags['state_district']))
-            $adr[] = '<span class="p-region">' . $tags['state_district'] . '</span>';
+            $out['region'] = $tags['state-district'];
         
         // p-postal-code
         if (isset($tags['postcode']))
-            $adr[] = '<span class="p-postal-code">' . $tags['postcode'] . '</span>';
+            $out['postal-code'] = $tags['postcode'];
         
         // p-country-name
         if (isset($tags['country']))
-            $adr[] = '<span class="p-country-name">' . $tags['country'] . '</span>';
+            $out['country-name'] = $tags['county'];
         
-        // Produce final output
-        $out = '';
+        $µf2['properties'] = $out;
         
-        if ($geo !== null)
-            $out .= '<span class="h-geo">' . $geo . '</span>';
-        
-        if ($adr !== null)
-            $out .= '<span class="h-adr">' . implode(', ', $adr) . '</span>';
-        
-        return trim($out);
+        return $µf2;
     }
 
     /**
