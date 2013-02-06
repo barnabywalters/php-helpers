@@ -351,7 +351,20 @@ class Helpers {
         $tags = Helpers::tagstringToArray($tagstring);
         return implode(',', $tags);
     }
-
+    
+    /**
+     * Auto Link Hashtags
+     * 
+     * Given a string and a baseurl, finds all hashtags matching
+     * `#[\-_a-zA-Z0-9]+` and wraps them in an `a` element with `rel=tag` set
+     * and a `href` of baseurl + '/' + tagname without the #.
+     * 
+     * @todo Improve the regex to limit false matches
+     * 
+     * @param string $text
+     * @param string $baseUrl
+     * @return string The original text with all hashtags auto-linked
+     */
     public static function autolinkHashTags($text, $baseUrl) {
         $baseUrl = rtrim($baseUrl, '/');
         
