@@ -49,7 +49,7 @@ class Helpers {
             strip_tags(H::expandImg($tweet['status'])),
             $length = 140,
             $uri = $url,
-            $urilen = 20
+            $urilen = 22
         );
         ob_end_clean();
 

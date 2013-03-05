@@ -8,7 +8,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 /**
  * StringArray
  *
- * @author barnabywalters
+ * @author Barnaby Walters
  */
 class StringArray extends Type{
     public function getName() {
