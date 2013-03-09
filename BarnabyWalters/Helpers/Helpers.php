@@ -638,6 +638,22 @@ class Helpers {
         $replacement->appendXML($html);        
         $el->parentNode->replaceChild($replacement, $el);
     }
+    
+    public static function urlHost($url) {
+        return parse_url($url, PHP_URL_HOST);
+    }
+    
+    public static function urlPath($url) {
+        return parse_url($url, PHP_URL_PATH);
+    }
+    
+    public static function urlFilename($url, $noExtension = false) {
+        $fullName = array_pop(explode('/', trim(self::urlPath($url), '/')));
+        
+        return $noExtension
+            ? pathinfo($fullName, PATHINFO_BASENAME)
+            : $fullName;
+    }
 }
 
 // EOF Helpers.php
