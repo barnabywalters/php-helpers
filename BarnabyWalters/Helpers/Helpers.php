@@ -626,6 +626,18 @@ class Helpers {
         else
             return $doc->saveXML();
     }
+    
+    /**
+     * Replace Element With HTML
+     * @param DOMElement $el
+     * @param string $html XML-compatible HTML
+     * @return null
+     */
+    public static function replaceElementWithHtml(DOMElement $el, $html) {
+        $replacement = $el->ownerDocument->createDocumentFragment();
+        $replacement->appendXML($html);        
+        $el->parentNode->replaceChild($replacement, $el);
+    }
 }
 
 // EOF Helpers.php
