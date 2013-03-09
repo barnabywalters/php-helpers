@@ -372,7 +372,7 @@ class Helpers {
         $replacements = array();
         $matches = array();
         
-        if (preg_match_all('/#[\-_a-zA-Z0-9]+/', $text, $matches, PREG_PATTERN_ORDER)) {
+        if (preg_match_all('/(?<=^|\s)\#([a-zA-Z0-9\-\_]+)/i', $text, $matches, PREG_PATTERN_ORDER)) {
             // Look up #tags, get Full name and URL
             foreach ($matches[0] as $name) {
                 $name = str_replace('#', '', $name);
