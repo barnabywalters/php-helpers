@@ -654,6 +654,26 @@ class Helpers {
             ? pathinfo($fullName, PATHINFO_BASENAME)
             : $fullName;
     }
+    
+    /**
+     * Get Inner HTML
+     * 
+     * @param DOMDocument|DOMNode $doc
+     * @return string
+     */
+    public static function innerHtml($doc) {
+        if ($doc instanceof \DOMDocument)
+            $childNodes = $doc->documentElement->childNodes;
+        else
+            $childNodes = $doc->childNodes;
+            
+        $out = '';
+        foreach ($childNodes as $child) {
+            $out .= $doc->saveXML($child);
+        }
+        
+        return $out;
+    }
 }
 
 // EOF Helpers.php
