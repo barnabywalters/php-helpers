@@ -303,6 +303,14 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($expected, $result);
     }
+    
+    public function testToFormUrlEncodedHandlesAssocArray() {
+        $data = ['thing' => 'name', 'another' => 'BLAH'];
+        $expected = 'thing=name&another=BLAH';
+        $result = H::toFormUrlencoded($data);
+        
+        $this->assertEquals($expected, $result);
+    }
 }
 
 // EOF

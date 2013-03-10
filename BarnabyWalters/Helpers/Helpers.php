@@ -675,6 +675,26 @@ class Helpers {
         
         return $out;
     }
+    
+    /**
+     * To x-www-form-urlencoded
+     * 
+     * @todo make this handle lists correctly
+     * @todo possibly handle nested arrays correctly
+     * @param array $data
+     */
+    public static function toFormUrlencoded(array $data) {
+        $pairs = [];
+        
+        foreach ($data as $key => $val) {
+            if (is_array($val))
+                $pairs[] = self::toFormUrlencoded($val);
+            else
+                $pairs[] = urlencode($key) . '=' . urlencode($val);
+        }
+        
+        return implode('&', $pairs);
+    }
 }
 
 // EOF Helpers.php
