@@ -648,7 +648,8 @@ class Helpers {
     }
     
     public static function urlFilename($url, $noExtension = false) {
-        $fullName = array_pop(explode('/', trim(self::urlPath($url), '/')));
+        $segments = explode('/', trim(self::urlPath($url), '/'));
+        $fullName = array_pop($segments);
         
         return $noExtension
             ? pathinfo($fullName, PATHINFO_BASENAME)
