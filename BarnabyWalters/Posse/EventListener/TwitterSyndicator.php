@@ -270,15 +270,9 @@ class TwitterSyndicator implements EventSubscriberInterface {
             $request = $client->post('statuses/update.json')
                 ->addPostFields($twitterApiQuery);
             $response = $request->send();
-        } catch (Guzzle\Http\Exception\BadResponseException $e) {
+        } catch (\Guzzle\Common\Exception\GuzzleException $e) {
             $this->logger->err('Twitter syndication attempt failed', array(
-                'message' => $e->getMessage(),
-                'code' => $e->getCode()
-            ));
-            
-            return;
-        } catch (Guzzle\Http\Exception\CurlException $e) {
-            $this->logger->err('Twitter syndication attempt failed with CURL exception', array(
+                'exception' => get_class($e),
                 'message' => $e->getMessage(),
                 'code' => $e->getCode()
             ));
