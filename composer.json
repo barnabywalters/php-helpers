@@ -13,13 +13,11 @@
     },
     "require-dev": {
         "doctrine/orm": "*",
-        "activitystreams/activitystreams": "dev-master",
         "symfony/event-dispatcher": "2.1.*",
         "guzzle/guzzle": "*"
     },
     "suggests": {
         "doctrine/orm": "To use the JSON type with",
-        "activitystreams/activitystreams": "For POSSE events to work properly",
         "symfony/event-dispatcher": "For POSSE events to work properly",
         "guzzle/guzzle": "For HTTP API access in POSSE events to work",
         "monolog/monolog": "For logging"
