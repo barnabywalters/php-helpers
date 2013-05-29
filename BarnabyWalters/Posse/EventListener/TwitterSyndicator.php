@@ -2,15 +2,11 @@
 
 namespace BarnabyWalters\Posse\EventListener;
 
-use ActivityStreams\ActivityStreams\ObjectInterface;
-use ActivityStreams\Event\ActivityEvent;
-use ActivityStreams\Event\ActivityEvents;
 use BarnabyWalters\Posse\Helpers;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Monolog\Logger;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher;
 
 /**
  * TwitterSyndicator
@@ -83,10 +79,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * contain the at-name of the user they’re in reply to. If they don’t they will
  * still be tweeted, but won’t show up in conversation views.
  * 
+ * @todo update to use Psr\Log
+ * 
  * @author Barnaby Walters http://waterpigs.co.uk <barnaby@waterpigs.co.uk>
  * @since 0.1.4
  */
-class TwitterSyndicator implements EventSubscriberInterface {
+class TwitterSyndicator implements EventDispatcher\EventSubscriberInterface {
     const STRATEGY_SYNDICATE_UNLESS_TAGGED = 'SYNDICATE_UNLESS_TAGGED';
     const STRATEGY_SYNDICATE_IF_TAGGED = 'SYNDICATE_IF_TAGGED';
     
@@ -153,16 +151,16 @@ class TwitterSyndicator implements EventSubscriberInterface {
      * 
      * @todo write tests
      * 
-     * @param \ActivityStreams\ActivityStreams\ObjectInterface $object
+     * @param array $object
      * @return string
      */
-    public static function summariseObject(ObjectInterface $object) {
+    public static function summariseObject(array $object) {
         $out = '';
         
-        if (!empty($object['title']))
-            $out .= trim($object['title']);
+        if (!empty($object['name']))
+            $out .= trim($object['name']);
         
-        if (!empty($object['title']) and
+        if (!empty($object['name']) and
                 (!empty($object['summary'])
              or !empty($object['content'])))
             $out .= ': ';
@@ -193,14 +191,10 @@ class TwitterSyndicator implements EventSubscriberInterface {
      * 1. Otherwise, if the object supports `::get/setDownstreamDuplicate`, get
      *    the duplicates, append the tweet URL and set them again.
      * 
-     * @param \ActivityStreams\Event\ActivityEvent $event
+     * @param EventDispatcher\GenericEvent $event
      * @return string|null The strings are just for test debugging purposes
      */
-    public function syndicateToTwitter(Event $event) {
-        if (!$event instanceof ActivityEvent)
-            return 'Not an ActivityEvent';
-        
-        /* @var $object ObjectInterface */
+    public function syndicateToTwitter(EventDispatcher\GenericEvent $event) {
         $object = $event['object'];
         
         if (empty($object['tags'])) {
@@ -238,8 +232,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
         $content = self::summariseObject($object);
         $url = $object['url'];
         
-        if (!empty($object['inReplyTo']))
-            $inReplyTo = $object['inReplyTo'];
+        if (!empty($object['in-reply-to']))
+            $inReplyTo = $object['in-reply-to'];
         else
             $inReplyTo = null;
         
@@ -291,7 +285,8 @@ class TwitterSyndicator implements EventSubscriberInterface {
         
         $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/status/' . $tweetId;
         
-        $object->addDownstreamDuplicate($tweetUrl);
+        $object['syndication'][] = $tweetUrl;
+        $event['object'] = $object;
         
         return true;
     }
