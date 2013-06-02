@@ -98,7 +98,7 @@ class TwitterSyndicator implements EventDispatcher\EventSubscriberInterface {
     private $logger;
     
     public static function getSubscribedEvents() {
-        return array('activitystreams.post.post' => array('syndicateToTwitter', ActivityEvents::POST_POST_GUARANTEE_SYNDICATED + 10));
+        return array('activitystreams.post.post' => array('syndicateToTwitter', 10));
     }
     
     /**
