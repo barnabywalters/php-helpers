@@ -53,12 +53,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tantek/cassis.git",
-                "reference": "d2d6aa036696dae92f96335d77a657288ab5a04d"
+                "reference": "bc080dc4dc13c4a0944e3e422ba1d8b557dbff02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tantek/cassis/zipball/d2d6aa036696dae92f96335d77a657288ab5a04d",
-                "reference": "d2d6aa036696dae92f96335d77a657288ab5a04d",
+                "url": "https://api.github.com/repos/tantek/cassis/zipball/bc080dc4dc13c4a0944e3e422ba1d8b557dbff02",
+                "reference": "bc080dc4dc13c4a0944e3e422ba1d8b557dbff02",
                 "shasum": ""
             },
             "type": "library",
@@ -68,7 +68,7 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-05-15 18:48:18"
+            "time": "2013-06-04 00:20:54"
         }
     ],
     "packages-dev": [
@@ -554,12 +554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "4e8b787d072fe48e798a1bd5cd05f08e9a083525"
+                "reference": "3d6436c2f337d9e276c232e81a0e444edca98c8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/4e8b787d072fe48e798a1bd5cd05f08e9a083525",
-                "reference": "4e8b787d072fe48e798a1bd5cd05f08e9a083525",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/3d6436c2f337d9e276c232e81a0e444edca98c8f",
+                "reference": "3d6436c2f337d9e276c232e81a0e444edca98c8f",
                 "shasum": ""
             },
             "require": {
@@ -620,7 +620,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-05-28 07:36:17"
+            "time": "2013-06-03 10:37:38"
         },
         {
             "name": "guzzle/guzzle",
@@ -628,12 +628,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "a97fc9a9f826eb2075b8816b62b83457d9bd8fa5"
+                "reference": "86f38b11c21a4ee3a7f35cca878691a3c0367d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/a97fc9a9f826eb2075b8816b62b83457d9bd8fa5",
-                "reference": "a97fc9a9f826eb2075b8816b62b83457d9bd8fa5",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/86f38b11c21a4ee3a7f35cca878691a3c0367d38",
+                "reference": "86f38b11c21a4ee3a7f35cca878691a3c0367d38",
                 "shasum": ""
             },
             "require": {
@@ -677,7 +677,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.5-dev"
+                    "dev-master": "3.6-dev"
                 }
             },
             "autoload": {
@@ -712,7 +712,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-05-29 03:00:19"
+            "time": "2013-06-04 06:29:54"
         },
         {
             "name": "symfony/console",
@@ -721,12 +721,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "883831e2864a702de8e8c44b4d7691fa7ec44911"
+                "reference": "28b4eced63a11275583345feb3c8269967819eca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/883831e2864a702de8e8c44b4d7691fa7ec44911",
-                "reference": "883831e2864a702de8e8c44b4d7691fa7ec44911",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/28b4eced63a11275583345feb3c8269967819eca",
+                "reference": "28b4eced63a11275583345feb3c8269967819eca",
                 "shasum": ""
             },
             "require": {
@@ -765,7 +765,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-27 14:49:42"
+            "time": "2013-06-04 15:09:18"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -774,12 +774,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "v2.1.10"
+                "reference": "v2.1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.1.10",
-                "reference": "v2.1.10",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.1.11",
+                "reference": "v2.1.11",
                 "shasum": ""
             },
             "require": {
