@@ -1,7 +1,11 @@
 php-helpers
 ===========
 
-Yet another package full of helper functions. But these ones are mine.
+Yet another package full of helper functions.
+
+This is pretty much a personal dumping ground for little functions and classes I make which don’t fit anywhere else. Every now and again I extract a whole bunch of related functions into a package of their own.
+
+A lot of the open source code I’ve written depends on this package, which is not a very good thing as it’s actually quite big, especially if you install all the dev dependencies (which composer does by default). So I’m currently (2013-06) in the process of extracting the bits I’m using into minimal packages as described above.
 
 ## Contents
 
