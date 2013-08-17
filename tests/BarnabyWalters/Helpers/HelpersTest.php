@@ -317,7 +317,7 @@ class HelpersTest extends \PHPUnit_Framework_TestCase {
 			$this->assertEquals(1, $trimmedStrlen(' h '));
 		}
 		
-		public function testComposeApplysComposition() {
+		public function testComposeAppliesComposition() {
 			$this->assertEquals(1, H::compose(['strlen', 'trim'], [' h ']));
 		}
 }

@@ -49,6 +49,14 @@ class Helpers {
 			: $composition;
 	}
 	
+	public static function arrayHead(array $array) {
+		return array_slice($array, 0, count($array) - 1);
+	}
+	
+	public static function arrayTail(array $array) {
+		return array_slice($array, 1);
+	}
+	
 	/**
 	 * Returns the truest of the args presented. This is a dirty shortcut.
 	 */
