@@ -78,7 +78,7 @@ EOD;
 	}
 	
 	public function testDerivesInReplyToIdFromObjectInReplyToSyndication() {
-		$result = Helpers::prepareForTwitter('Blah.', 'http://example.com', ['syndication' => ['https://twitter.com/blah/statuses/1234567']]);
+		$result = Helpers::prepareForTwitter('Blah.', 'http://example.com', ['syndication' => ['https://twitter.com/blah/status/1234567']]);
 		
 		$this->assertEquals('1234567', $result['in_reply_to_status_id']);
 	}

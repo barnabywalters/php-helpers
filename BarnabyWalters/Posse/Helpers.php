@@ -55,16 +55,16 @@ class Helpers {
 		if (!empty($inReplyTo)) {
 			if (is_string($inReplyTo))
 				$inReplyTo = [$inReplyTo];
-			elseif (is_array($inReplyTo) and isset($inReplyTo['type']))
-				$inReplyTo = isset($inReplyTo['properties']['syndication'])
-					? $inReplyTo['properties']['syndication']
-					: [$inReplyTo['properties']['url']] ?: [];
+			elseif (is_array($inReplyTo))
+				$inReplyTo = isset($inReplyTo['syndication'])
+					? $inReplyTo['syndication']
+					: @([$inReplyTo['url']] ?: []);
 			
 			$tweetPattern = '/https?:\/\/twitter.com\/[a-zA-Z_]{1,20}\/status\/([0-9]*)/';
 			
 			foreach ($inReplyTo as $irt):
 				$matches = [];
-				if (preg_match($tweetPattern, $inReplyTo, $matches))
+				if (preg_match($tweetPattern, $irt, $matches))
 					$tweet['in_reply_to_status_id'] = $matches[1];
 					break;
 			endforeach;
