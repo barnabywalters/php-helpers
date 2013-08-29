@@ -287,5 +287,4 @@ class TwitterSyndicator implements EventDispatcher\EventSubscriberInterface {
 
 		return true;
 	}
-
 }
