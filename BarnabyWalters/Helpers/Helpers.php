@@ -18,22 +18,8 @@ use DOMXPath;
  * @author Barnaby Walters http://waterpigs.co.uk <barnaby@waterpigs.co.uk>
  */
 class Helpers {
-	/**
-	 * Takes a bunch of callables, returns a new callable which is the composition
-	 * of all the arguments in order
-	 * 
-	 * E.G. H::compose('strlen', 'trim') returns something equivalent to:
-	 * 	
-	 * Non-callable arguments are ignored
-	 */
-	public static function compose() {
-		$args = func_get_args();
-		
-		$funcs = array_reverse(array_filter($args[0], 'is_callable'));
-		
-		if (count($args == 2)) {
-			$apply = $args[1];
-		}
+	public static function compose(array $funcs, array $apply = null) {
+		$funcs = array_reverse(array_filter($funcs, 'is_callable'));
 		
 		$composition = function () use ($funcs) {
 			$args = func_get_args();
@@ -44,7 +30,7 @@ class Helpers {
 			}, $initial);
 		};
 		
-		return is_set($apply)
+		return is_array($apply)
 			? call_user_func_array($composition, $args[1])
 			: $composition;
 	}

@@ -85,211 +85,207 @@ use Symfony\Component\EventDispatcher;
  * @since 0.1.4
  */
 class TwitterSyndicator implements EventDispatcher\EventSubscriberInterface {
-    const STRATEGY_SYNDICATE_UNLESS_TAGGED = 'SYNDICATE_UNLESS_TAGGED';
-    const STRATEGY_SYNDICATE_IF_TAGGED = 'SYNDICATE_IF_TAGGED';
-    
-    public $tag = 'tweet';
-    public $strategy = self::STRATEGY_SYNDICATE_IF_TAGGED;
-    public $twitterApiVersion = '1.1';
-    
-    private $twitterCredentials;
-    private $client;
-    /** @var Logger */
-    private $logger;
-    
-    public static function getSubscribedEvents() {
-        return array('activitystreams.post.post' => array('syndicateToTwitter', 10));
-    }
-    
-    /**
-     * Constructor
-     * @param array $config
-     * @todo Add support for different twitter API versions?
-     */
-    public function __construct(array $config = array()) {
-        if (array_key_exists('strategy', $config))
-                $this->strategy = strtoupper(str_replace (' ', '_', $config['strategy']));
-        
-        if (array_key_exists('tag', $config))
-                $this->tag = strtolower($config['tag']);
-        
-        if (array_key_exists('twitterCredentials', $config))
-            $this->twitterCredentials = $config['twitterCredentials'];
-    }
-    
-    public function setLogger(Logger $logger) {
-        $this->logger = $logger;
-    }
-    
-    /**
-     * Set Guzzle
-     * 
-     * Used internally for testing. Forces `syndicateToTwitter()` to use a mock
-     * object implementing Guzzle\Http\ClientInterface as the client.
-     * 
-     * @param \Guzzle\Http\ClientInterface $client
-     * @internal
-     */
-    public function setGuzzle(\Guzzle\Http\ClientInterface $client) {
-        $this->client = $client;
-    }
-    
-    /**
-     * Summarise Object
-     * 
-     * Given an ActivityStreams Object, produce a string which summarises it.
-     * 
-     * Typically this takes the form of:
-     * 
-     *     Title: Summary
-     *     Content
-     * 
-     * …where any one of the components is optional.
-     * 
-     * This function performs no truncation at any stage. Use THE TRUNCENATOR or
-     * similar for that.
-     * 
-     * @todo write tests
-     * 
-     * @param array $object
-     * @return string
-     */
-    public static function summariseObject(array $object) {
-        $out = '';
-        
-        if (!empty($object['name']))
-            $out .= trim($object['name']);
-        
-        if (!empty($object['name']) and
-                (!empty($object['summary'])
-             or !empty($object['content'])))
-            $out .= ': ';
-        
-        if (!empty($object['summary']))
-            $out .= $object['summary'];
-        
-        if (!empty($object['content']))
-            $out .= "\n" . $object['content'];
-        
-        return trim($out);
-    }
-    
-    /**
-     * Syndicate To Twitter
-     * 
-     * Checks to see if the content is designated to be syndicated, syndicates 
-     * it, then updates it’s downstreamDuplicates property with the new copy on
-     * Twitter.
-     * 
-     * 1. Checks to see if `$event` is an `ActivityEvent`
-     * 1. Checks to see if `$event->getObjects()` has `::getTags()`
-     * 1. Taking `$this->strategy` into account, determine whether or not the 
-     *    object should be syndicate to twitter from it’s tags
-     * 1. Syndicate to Twitter
-     * 1. Build tweet URL from response JSON
-     * 1. If the object supports `::addDownstreamSuplicate()`, call that
-     * 1. Otherwise, if the object supports `::get/setDownstreamDuplicate`, get
-     *    the duplicates, append the tweet URL and set them again.
-     * 
-     * @param EventDispatcher\GenericEvent $event
-     * @return string|null The strings are just for test debugging purposes
-     */
-    public function syndicateToTwitter(EventDispatcher\GenericEvent $event) {
-        $object = $event['object'];
-        
-        if (empty($object['tags'])) {
-            if ($this->logger != null)
-                $this->logger->err('Object has no tags so cannot determine whether or not to syndicate');
-            return 'Object has no tags so cannot determine whether or not to syndicate';
-        }
-        
-        $tags = $object['tags'];
-        
-        if (!is_array($tags)) {
-            if ($this->logger != null)
-                $this->logger->err('Tags are not an array');
-            return 'Tags are not an array';
-        }
-        
-        $syndicating = false;
-        
-        if (($this->strategy == self::STRATEGY_SYNDICATE_IF_TAGGED
-            and in_array($this->tag, $tags))
-        or ($this->strategy == self::STRATEGY_SYNDICATE_UNLESS_TAGGED)
-            and !in_array($this->tag, $tags))
-                $syndicating = true;
-        
-        if (!$syndicating) {
-            if ($this->logger != null)
-                $this->logger->info('Object is not a syndication candidate');
-            return 'Object is not a syndication candidate';
-        }
-        
-        // Remove syndication tag as it’s transient
-        $object['tags'] = array_diff($tags, array($this->tag));
-        
-        // We’re syndicating!
-        $content = self::summariseObject($object);
-        $url = $object['url'];
-        
-        if (!empty($object['in-reply-to']))
-            $inReplyTo = $object['in-reply-to'];
-        else
-            $inReplyTo = null;
-        
-        $twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
-        
-        if ($this->logger != null)
-            $this->logger->info("Built Twitter Query", $twitterApiQuery);
-        
-        if ($this->client != null) {
-            $client = $this->client;
-        } else {
-            $client = new Client('https://api.twitter.com/{version}/', array(
-                'version' => $this->twitterApiVersion,
-                'ssl.certificate_authority' => 'system'
-            ));
-        }
-        
-        $oauth = new OauthPlugin(array(
-            'consumer_key'    => $this->twitterCredentials['consumerKey'],
-            'consumer_secret' => $this->twitterCredentials['consumerSecret'],
-            'token'           => $this->twitterCredentials['accessToken'],
-            'token_secret'    => $this->twitterCredentials['accessTokenSecret']
-        ));
-        $client->addSubscriber($oauth);
-        
-        // Try to syndicate to twitter
-        try {
-            $request = $client->post('statuses/update.json')
-                ->addPostFields($twitterApiQuery);
-            $response = $request->send();
-        } catch (\Guzzle\Common\Exception\GuzzleException $e) {
-            $this->logger->err('Twitter syndication attempt failed', array(
-                'exception' => get_class($e),
-                'message' => $e->getMessage(),
-                'code' => $e->getCode()
-            ));
-            
-            return;
-        }
-        
-        $tweet = $response->json();
-        
-        if ($this->logger != null)
-            $this->logger->info('Received response', $tweet);
-        
-        // Add the id and a generated URL for the tweet to $object.downstreamCopies
-        $tweetId = $tweet['id_str'];
-        $tweetUserHandle = $tweet['user']['screen_name'];
-        
-        $tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/status/' . $tweetId;
-        
-        $object['syndication'][] = $tweetUrl;
-        $event['object'] = $object;
-        
-        return true;
-    }
-}
 
-// EOF
+	const STRATEGY_SYNDICATE_UNLESS_TAGGED = 'SYNDICATE_UNLESS_TAGGED';
+	const STRATEGY_SYNDICATE_IF_TAGGED = 'SYNDICATE_IF_TAGGED';
+
+	public $tag = 'tweet';
+	public $strategy = self::STRATEGY_SYNDICATE_IF_TAGGED;
+	public $twitterApiVersion = '1.1';
+	private $twitterCredentials;
+	private $client;
+
+	/** @var Logger */
+	private $logger;
+
+	public static function getSubscribedEvents() {
+		return array('activitystreams.post.post' => array('syndicateToTwitter', 10));
+	}
+
+	/**
+	 * Constructor
+	 * @param array $config
+	 * @todo Add support for different twitter API versions?
+	 */
+	public function __construct(array $config = array()) {
+		if (array_key_exists('strategy', $config))
+			$this->strategy = strtoupper(str_replace(' ', '_', $config['strategy']));
+
+		if (array_key_exists('tag', $config))
+			$this->tag = strtolower($config['tag']);
+
+		if (array_key_exists('twitterCredentials', $config))
+			$this->twitterCredentials = $config['twitterCredentials'];
+	}
+
+	public function setLogger(Logger $logger) {
+		$this->logger = $logger;
+	}
+
+	/**
+	 * Set Guzzle
+	 * 
+	 * Used internally for testing. Forces `syndicateToTwitter()` to use a mock
+	 * object implementing Guzzle\Http\ClientInterface as the client.
+	 * 
+	 * @param \Guzzle\Http\ClientInterface $client
+	 * @internal
+	 */
+	public function setGuzzle(\Guzzle\Http\ClientInterface $client) {
+		$this->client = $client;
+	}
+
+	/**
+	 * Summarise Object
+	 * 
+	 * Given an ActivityStreams Object, produce a string which summarises it.
+	 * 
+	 * Typically this takes the form of:
+	 * 
+	 *     Title: Summary
+	 *     Content
+	 * 
+	 * …where any one of the components is optional.
+	 * 
+	 * This function performs no truncation at any stage. Use THE TRUNCENATOR or
+	 * similar for that.
+	 * 
+	 * @todo write tests
+	 * 
+	 * @param array $object
+	 * @return string
+	 */
+	public static function summariseObject(array $object) {
+		$out = '';
+
+		if (!empty($object['name']))
+			$out .= trim($object['name']);
+
+		if (!empty($object['name']) and
+			(!empty($object['summary']) or !empty($object['content'])))
+			$out .= ': ';
+
+		if (!empty($object['summary']))
+			$out .= $object['summary'];
+
+		if (!empty($object['content']))
+			$out .= "\n" . $object['content'];
+
+		return trim($out);
+	}
+
+	/**
+	 * Syndicate To Twitter
+	 * 
+	 * Checks to see if the content is designated to be syndicated, syndicates 
+	 * it, then updates it’s downstreamDuplicates property with the new copy on
+	 * Twitter.
+	 * 
+	 * 1. Checks to see if `$event` is an `ActivityEvent`
+	 * 1. Checks to see if `$event->getObjects()` has `::getTags()`
+	 * 1. Taking `$this->strategy` into account, determine whether or not the 
+	 *    object should be syndicate to twitter from it’s tags
+	 * 1. Syndicate to Twitter
+	 * 1. Build tweet URL from response JSON
+	 * 1. If the object supports `::addDownstreamSuplicate()`, call that
+	 * 1. Otherwise, if the object supports `::get/setDownstreamDuplicate`, get
+	 *    the duplicates, append the tweet URL and set them again.
+	 * 
+	 * @param EventDispatcher\GenericEvent $event
+	 * @return string|null The strings are just for test debugging purposes
+	 */
+	public function syndicateToTwitter(EventDispatcher\GenericEvent $event) {
+		$object = $event['object'];
+
+		if (empty($object['tags'])) {
+			if ($this->logger != null)
+				$this->logger->err('Object has no tags so cannot determine whether or not to syndicate');
+			return 'Object has no tags so cannot determine whether or not to syndicate';
+		}
+
+		$tags = $object['tags'];
+
+		if (!is_array($tags)) {
+			if ($this->logger != null)
+				$this->logger->err('Tags are not an array');
+			return 'Tags are not an array';
+		}
+
+		$syndicating = false;
+
+		if (($this->strategy == self::STRATEGY_SYNDICATE_IF_TAGGED and in_array($this->tag, $tags)) or ($this->strategy == self::STRATEGY_SYNDICATE_UNLESS_TAGGED) and !in_array($this->tag, $tags))
+			$syndicating = true;
+
+		if (!$syndicating) {
+			if ($this->logger != null)
+				$this->logger->info('Object is not a syndication candidate');
+			return 'Object is not a syndication candidate';
+		}
+
+		// Remove syndication tag as it’s transient
+		$object['tags'] = array_diff($tags, array($this->tag));
+
+		// We’re syndicating!
+		$content = self::summariseObject($object);
+		$url = $object['url'];
+
+		if (!empty($object['in-reply-to']))
+			$inReplyTo = $object['in-reply-to'];
+		else
+			$inReplyTo = null;
+
+		$twitterApiQuery = Helpers::prepareForTwitter($content, $url, $inReplyTo);
+
+		if ($this->logger != null)
+			$this->logger->info("Built Twitter Query", $twitterApiQuery);
+
+		if ($this->client != null) {
+			$client = $this->client;
+		} else {
+			$client = new Client('https://api.twitter.com/{version}/', array(
+				'version' => $this->twitterApiVersion,
+				'ssl.certificate_authority' => 'system'
+			));
+		}
+
+		$oauth = new OauthPlugin(array(
+			'consumer_key' => $this->twitterCredentials['consumerKey'],
+			'consumer_secret' => $this->twitterCredentials['consumerSecret'],
+			'token' => $this->twitterCredentials['accessToken'],
+			'token_secret' => $this->twitterCredentials['accessTokenSecret']
+		));
+		$client->addSubscriber($oauth);
+
+		// Try to syndicate to twitter
+		try {
+			$request = $client->post('statuses/update.json')
+				->addPostFields($twitterApiQuery);
+			$response = $request->send();
+		} catch (\Guzzle\Common\Exception\GuzzleException $e) {
+			$this->logger->err('Twitter syndication attempt failed', array(
+				'exception' => get_class($e),
+				'message' => $e->getMessage(),
+				'code' => $e->getCode()
+			));
+
+			return;
+		}
+
+		$tweet = $response->json();
+
+		if ($this->logger != null)
+			$this->logger->info('Received response', $tweet);
+
+		// Add the id and a generated URL for the tweet to $object.downstreamCopies
+		$tweetId = $tweet['id_str'];
+		$tweetUserHandle = $tweet['user']['screen_name'];
+
+		$tweetUrl = 'https://twitter.com/' . $tweetUserHandle . '/status/' . $tweetId;
+
+		$object['syndication'][] = $tweetUrl;
+		$event['object'] = $object;
+
+		return true;
+	}
+
+}
