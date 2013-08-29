@@ -14,7 +14,8 @@
     "require-dev": {
         "doctrine/orm": "*",
         "symfony/event-dispatcher": "2.3.*",
-        "guzzle/guzzle": "*"
+        "guzzle/guzzle": "*",
+        "phpunit/phpunit": "*"
     },
     "suggests": {
         "doctrine/orm": "To use the JSON type with",
