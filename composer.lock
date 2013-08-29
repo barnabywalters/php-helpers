@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bfabf7c397090f594bf9ae01c7df5d5c9e045c76"
+                "reference": "e5309d1b4ea5cc2bb9b28bdcd3cfb45c5e2d2aaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bfabf7c397090f594bf9ae01c7df5d5c9e045c76",
-                "reference": "bfabf7c397090f594bf9ae01c7df5d5c9e045c76",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/e5309d1b4ea5cc2bb9b28bdcd3cfb45c5e2d2aaa",
+                "reference": "e5309d1b4ea5cc2bb9b28bdcd3cfb45c5e2d2aaa",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +46,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2013-08-09 04:19:56"
+            "time": "2013-08-29 02:51:33"
         },
         {
             "name": "tantek/cassis",
@@ -54,12 +54,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tantek/cassis.git",
-                "reference": "v0.1.15895"
+                "reference": "c158d9ebec1a5066e8ebc96f97b00658930dbf1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tantek/cassis/zipball/v0.1.15895",
-                "reference": "v0.1.15895",
+                "url": "https://api.github.com/repos/tantek/cassis/zipball/c158d9ebec1a5066e8ebc96f97b00658930dbf1f",
+                "reference": "c158d9ebec1a5066e8ebc96f97b00658930dbf1f",
                 "shasum": ""
             },
             "type": "library",
@@ -146,7 +146,7 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "dev-master",
+            "version": "v1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
@@ -199,7 +199,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -286,12 +286,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "9c6b8615a988117dec83bdbb0fad80afef23eab8"
+                "reference": "b4c7860e0c5a8d13598ca34d156533300b0dacf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/9c6b8615a988117dec83bdbb0fad80afef23eab8",
-                "reference": "9c6b8615a988117dec83bdbb0fad80afef23eab8",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/b4c7860e0c5a8d13598ca34d156533300b0dacf0",
+                "reference": "b4c7860e0c5a8d13598ca34d156533300b0dacf0",
                 "shasum": ""
             },
             "require": {
@@ -337,7 +337,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -352,7 +352,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2013-07-30 05:35:10"
+            "time": "2013-08-20 18:10:31"
         },
         {
             "name": "doctrine/dbal",
@@ -360,12 +360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "d3c2e5e521e4cf0ebc09fb7fe0bca33d91f695ab"
+                "reference": "7ffb2701931aeae3bb32fa2012b9a575f3a7929b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/d3c2e5e521e4cf0ebc09fb7fe0bca33d91f695ab",
-                "reference": "d3c2e5e521e4cf0ebc09fb7fe0bca33d91f695ab",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7ffb2701931aeae3bb32fa2012b9a575f3a7929b",
+                "reference": "7ffb2701931aeae3bb32fa2012b9a575f3a7929b",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2013-08-10 20:04:24"
+            "time": "2013-08-24 01:02:33"
         },
         {
             "name": "doctrine/inflector",
@@ -555,12 +555,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "605c32dbb384e25117625a7cb4db4e7319a16bae"
+                "reference": "fc7719d5fae069dad3915cc5330dcfb421439170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/605c32dbb384e25117625a7cb4db4e7319a16bae",
-                "reference": "605c32dbb384e25117625a7cb4db4e7319a16bae",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/fc7719d5fae069dad3915cc5330dcfb421439170",
+                "reference": "fc7719d5fae069dad3915cc5330dcfb421439170",
                 "shasum": ""
             },
             "require": {
@@ -622,7 +622,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-08-16 04:36:22"
+            "time": "2013-08-29 03:15:55"
         },
         {
             "name": "guzzle/guzzle",
@@ -630,12 +630,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "99a690a7444304a1e136e3d361c2f760c7df057d"
+                "reference": "647cd469ce63efc8908a604e866ee322e82a693c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/99a690a7444304a1e136e3d361c2f760c7df057d",
-                "reference": "99a690a7444304a1e136e3d361c2f760c7df057d",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/647cd469ce63efc8908a604e866ee322e82a693c",
+                "reference": "647cd469ce63efc8908a604e866ee322e82a693c",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2013-08-15 20:53:03"
+            "time": "2013-08-28 04:14:17"
         },
         {
             "name": "symfony/console",
@@ -723,12 +723,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "bf382b256067b3b6c6c6950f6ff3158854388584"
+                "reference": "8f04af088451aa787e8c2433aa8174f2a0e10b4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/bf382b256067b3b6c6c6950f6ff3158854388584",
-                "reference": "bf382b256067b3b6c6c6950f6ff3158854388584",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/8f04af088451aa787e8c2433aa8174f2a0e10b4b",
+                "reference": "8f04af088451aa787e8c2433aa8174f2a0e10b4b",
                 "shasum": ""
             },
             "require": {
@@ -767,7 +767,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-08-09 06:03:04"
+            "time": "2013-08-23 15:27:50"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -776,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher.git",
-                "reference": "v2.1.12"
+                "reference": "e1d18ff0ff6f3e45ac82f000bc221135df635527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/v2.1.12",
-                "reference": "v2.1.12",
+                "url": "https://api.github.com/repos/symfony/EventDispatcher/zipball/e1d18ff0ff6f3e45ac82f000bc221135df635527",
+                "reference": "e1d18ff0ff6f3e45ac82f000bc221135df635527",
                 "shasum": ""
             },
             "require": {
